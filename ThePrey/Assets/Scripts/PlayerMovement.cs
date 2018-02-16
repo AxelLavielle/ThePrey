@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour {
 	Vector3 moveAmount;
 	Vector3 smoothMoveVelocity;
 	Rigidbody rigidbody;
-
+	bool sneak;
 
 	void Awake() {
 		Cursor.lockState = CursorLockMode.Locked;
@@ -28,6 +28,11 @@ public class PlayerMovement : MonoBehaviour {
 
         Vector3 moveDir = new Vector3(inputX, 0, inputY).normalized;
 		Vector3 targetMoveAmount = moveDir * walkSpeed;
+		if (Input.GetButton ("Shift")) {
+			targetMoveAmount /= 4;
+			sneak = true;
+		} else
+			sneak = false;
 		moveAmount = Vector3.SmoothDamp(moveAmount,targetMoveAmount,ref smoothMoveVelocity,.15f);
 		transform.Rotate(Vector3.up * mouseX * rotateSpeed);
 

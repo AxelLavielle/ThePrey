@@ -336,7 +336,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 134614385
+  randomSeed: -1535245960
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -488,7 +488,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.1
+      scalar: 0.05
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -801,7 +801,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 0.1
+      value: 0.2
       mode: 0
       spread: 0
       speed:
@@ -3830,7 +3830,7 @@ MonoBehaviour:
   target: {fileID: 2133792663}
   distToPlayer: 2
   rotation: 0.3
-  rotSpeed: 10
+  rotSpeed: 15
 --- !u!1 &2133792663
 GameObject:
   m_ObjectHideFlags: 0
@@ -3876,7 +3876,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkSpeed: 6
-  rotateSpeed: 5
+  rotateSpeed: 3
 --- !u!54 &2133792666
 Rigidbody:
   m_ObjectHideFlags: 0
