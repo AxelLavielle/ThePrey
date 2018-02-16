@@ -11,12 +11,20 @@ public class PlayerMovement : MonoBehaviour {
 	Vector3 moveAmount;
 	Vector3 smoothMoveVelocity;
 	Rigidbody rigidbody;
+
 	bool sneak;
+	bool run;
+
+	// Ressources
+	public int life = 10;
+	public float stamina = 2;
 
 	void Awake() {
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
 		rigidbody = GetComponent<Rigidbody> ();
+		sneak = false;
+		run = true;
 	}
 
 	void Update() {
@@ -30,9 +38,25 @@ public class PlayerMovement : MonoBehaviour {
 		Vector3 targetMoveAmount = moveDir * walkSpeed;
 		if (Input.GetButton ("Shift")) {
 			targetMoveAmount /= 4;
+			run = false;
 			sneak = true;
-		} else
+			stamina += Time.deltaTime;
+			if (stamina >= 2)
+				stamina = 2;
+		} else if (Input.GetButton ("Space") && (stamina == 2 || run)) {
 			sneak = false;
+			stamina -= Time.deltaTime;
+			run = true;
+			if (stamina == 0)
+				run = false;
+			targetMoveAmount *= 1.75f;
+		} else {
+			run = false;
+			sneak = false;
+			stamina += Time.deltaTime;
+			if (stamina >= 2)
+				stamina = 2;
+		}
 		moveAmount = Vector3.SmoothDamp(moveAmount,targetMoveAmount,ref smoothMoveVelocity,.15f);
 		transform.Rotate(Vector3.up * mouseX * rotateSpeed);
 
