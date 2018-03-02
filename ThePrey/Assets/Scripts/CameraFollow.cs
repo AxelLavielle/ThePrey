@@ -20,7 +20,8 @@ public class CameraFollow : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		distToPlayer += Input.GetAxis ("Mouse ScrollWheel");
-		if (distToPlayer < 1.5f)
+        target.transform.Rotate(Vector3.up * Input.GetAxis("Mouse X") * target.GetComponent<Player>().rotateSpeed);
+        if (distToPlayer < 1.5f)
 			distToPlayer = 1.5f;
 		else if (distToPlayer > 10)
 			distToPlayer = 10;
@@ -33,5 +34,6 @@ public class CameraFollow : MonoBehaviour {
 		offset.Normalize ();
 		transform.position = target.transform.position + offset * distToPlayer;
 		transform.LookAt (target.transform);
-	}
+
+    }
 }

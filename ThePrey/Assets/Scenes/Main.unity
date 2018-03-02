@@ -3726,9 +3726,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 864736444}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3daf70c97bdc30c4babb835f8e29aa9c, type: 3}
+  m_Script: {fileID: 11500000, guid: 1eb5c748a71754148a76b602e2e3dee5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  walkSpeed: 6
+  rotateSpeed: 3
+  life: 10
+  maxStamina: 2
 --- !u!1 &1704633060
 GameObject:
   m_ObjectHideFlags: 0
@@ -4102,7 +4106,7 @@ MonoBehaviour:
   walkSpeed: 6
   rotateSpeed: 3
   life: 10
-  stamina: 10
+  maxStamina: 2
 --- !u!54 &2133792666
 Rigidbody:
   m_ObjectHideFlags: 0
