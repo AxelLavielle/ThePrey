@@ -12,6 +12,10 @@ public class PlayerMovement : MonoBehaviour {
 	Vector3 smoothMoveVelocity;
 	Rigidbody rigidbody;
 
+    GameObject footprintCopy;
+    List<GameObject> footprints = new List<GameObject>();
+    bool nextIsLeft = true;
+
 	bool sneak;
 	bool run;
 
@@ -23,6 +27,24 @@ public class PlayerMovement : MonoBehaviour {
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
 		rigidbody = GetComponent<Rigidbody> ();
+
+        footprintCopy = GameObject.FindGameObjectWithTag("Asset");
+        for(int i = 0; i < 10; ++i)
+        {
+            footprints.Add(Instantiate(footprintCopy));
+
+            footprints[i].transform.SetParent(transform.parent);
+            Vector3 pos = transform.localPosition;
+           
+            pos.y = 0.0001f;
+            if (nextIsLeft)
+                pos.x -= 0.3f;
+            else
+                pos.x += 0.3f;
+            nextIsLeft = !nextIsLeft;
+            footprints[i].transform.localPosition = pos;
+        }
+
 		sneak = false;
 		run = true;
 	}
