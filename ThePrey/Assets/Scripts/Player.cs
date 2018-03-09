@@ -13,8 +13,8 @@ public class Player : MonoBehaviour {
 	Rigidbody rigidbody;
 
     GameObject footprintCopy;
-    List<GameObject> footprints = new List<GameObject>();
     bool nextIsLeft = true;
+    float distanceSinceLastStep = 0;
 
     bool sneak;
 	bool run;
@@ -28,33 +28,16 @@ public class Player : MonoBehaviour {
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
 		rigidbody = GetComponent<Rigidbody> ();
-
-        footprintCopy = GameObject.FindGameObjectWithTag("Asset");
-        for (int i = 0; i < 10; ++i)
-        {
-            footprints.Add(Instantiate(footprintCopy));
-
-            footprints[i].transform.SetParent(transform.parent);
-            Vector3 pos = transform.localPosition;
-
-            pos.y = 0.0001f;
-            if (nextIsLeft)
-                pos.x -= 0.3f;
-            else
-                pos.x += 0.3f;
-            nextIsLeft = !nextIsLeft;
-            footprints[i].transform.localPosition = pos;
-        }
-
         sneak = false;
 		run = true;
         stamina = maxStamina;
+        footprintCopy = GameObject.FindGameObjectWithTag("Asset");
 	}
 
 	void Update() {
 
-		// Calculate movement:
-		float inputX = Input.GetAxisRaw("Horizontal");
+        // Calculate movement:
+        float inputX = Input.GetAxisRaw("Horizontal");
 		float inputY = Input.GetAxisRaw("Vertical");
 
         Vector3 moveDir = new Vector3(inputX, 0, inputY).normalized;
@@ -88,5 +71,33 @@ public class Player : MonoBehaviour {
 		// Apply movement to rigidbody
 		Vector3 localMove = transform.TransformDirection(moveAmount) * Time.fixedDeltaTime;
 		rigidbody.MovePosition(rigidbody.position + localMove);
-	}
+        distanceSinceLastStep += Mathf.Abs(localMove.x) + Mathf.Abs(localMove.y) + Mathf.Abs(localMove.z);
+
+        if(distanceSinceLastStep > 1)
+        {
+            distanceSinceLastStep = 0;
+
+            GameObject ft = Instantiate(footprintCopy, transform.parent);
+            ft.transform.SetPositionAndRotation(transform.localPosition, transform.localRotation);
+
+            Quaternion rot = transform.localRotation;
+            rot *= Quaternion.Euler(90, 0, 0);
+
+            ft.transform.localRotation = rot;
+
+            Debug.Log(transform.right);
+            if (nextIsLeft)
+                ft.transform.position = Vector3.MoveTowards(transform.position, transform.right, -0.3f);
+            else
+                ft.transform.position = Vector3.MoveTowards(transform.position, transform.right, 0.3f);
+            nextIsLeft = !nextIsLeft;
+
+            Vector3 pos = ft.transform.localPosition;
+            pos.y = 0.0001f;
+
+            ft.transform.localPosition = pos;
+
+            Destroy(ft, 10);
+        }
+    }
 }
