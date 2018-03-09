@@ -85,7 +85,6 @@ public class Player : MonoBehaviour {
 
             ft.transform.localRotation = rot;
 
-            Debug.Log(transform.right);
             if (nextIsLeft)
                 ft.transform.position -= ft.transform.right / 3;
             else
