@@ -87,9 +87,9 @@ public class Player : MonoBehaviour {
 
             Debug.Log(transform.right);
             if (nextIsLeft)
-                ft.transform.position = Vector3.MoveTowards(transform.position, transform.right, -0.3f);
+                ft.transform.position -= ft.transform.right / 3;
             else
-                ft.transform.position = Vector3.MoveTowards(transform.position, transform.right, 0.3f);
+                ft.transform.position += ft.transform.right / 3;
             nextIsLeft = !nextIsLeft;
 
             Vector3 pos = ft.transform.localPosition;
