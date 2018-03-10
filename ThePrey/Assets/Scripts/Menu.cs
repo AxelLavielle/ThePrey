@@ -10,6 +10,11 @@ public class GameMode
     public static int mode = 0;
 }
 
+public class EndGame
+{
+    public static bool victory = true;
+}
+
 public class Menu : MonoBehaviour {
     string[] modes = new string[3];
     string[] descriptions = new string[3];
