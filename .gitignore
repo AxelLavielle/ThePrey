@@ -2,3 +2,6 @@ ThePrey\Temp
 ThePrey\Temp\*
 ThePrey\Assembly-CSharp.csproj
 ThePrey\Assembly-CSharp-Editor.csproj
+ThePrey/Assembly-CSharp-Editor.csproj
+*.csproj
+ThePrey/Library/CrashedAssetImports.txt
