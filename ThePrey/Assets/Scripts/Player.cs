@@ -12,6 +12,7 @@ public class Player : MonoBehaviour {
 	Vector3 smoothMoveVelocity;
 	Rigidbody rigidbody;
 
+    // Footprints vars
     GameObject footprintCopy;
     bool nextIsLeft = true;
     float distanceSinceLastStep = 0;

@@ -903,7 +903,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -1535245960
+  randomSeed: 1028828989
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -3998,7 +3998,7 @@ GameObject:
   - component: {fileID: 864736450}
   m_Layer: 0
   m_Name: NPC
-  m_TagString: Untagged
+  m_TagString: NPC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4339,6 +4339,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timerLabel: {fileID: 41760000}
+  mode: 0
 --- !u!1 &1563941713 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1272659553006670, guid: 94c3bdbd95bc16046b07a71b85ea4c95,
@@ -4696,7 +4697,7 @@ GameObject:
   - component: {fileID: 2133792665}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
