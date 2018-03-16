@@ -15,6 +15,7 @@ public class Game : MonoBehaviour {
 
     private float timer;
     public Text timerLabel;
+
     public GameModeEnum mode;
 
     private GameObject player;
@@ -73,8 +74,17 @@ public class Game : MonoBehaviour {
             SceneManager.LoadScene("Ending");
         }
 
-        // Check if no more NPCs    
-        if(NPCs.Count == 0)
+        // Check if no more NPCs
+        if(NPCs.Count == 0 && mode != GameModeEnum.E_CPF)
+        {
+            EndGame.victory = true;
+            SceneManager.LoadScene("Ending");
+        }
+    }
+
+    public void PointCaptured()
+    {
+        if (mode == GameModeEnum.E_CPF)
         {
             EndGame.victory = true;
             SceneManager.LoadScene("Ending");
