@@ -35,9 +35,9 @@ public class Game : MonoBehaviour {
 	void Update ()
     {
         timer -= Time.deltaTime;
-        float minutes = timer / 60;
-        float seconds = timer % 60;
-        float fraction = (timer * 100) % 100;
+        float minutes = Mathf.Floor(timer / 60f);
+        float seconds = Mathf.Floor(timer % 60f);
+        float fraction = Mathf.Floor((timer * 100f) % 100f);
 
         timerLabel.text = string.Format("{0:00} : {1:00} : {2:000}", minutes, seconds, fraction);
         CheckNPC();
