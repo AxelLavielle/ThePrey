@@ -11,6 +11,8 @@ public class CameraFollow : MonoBehaviour {
 	float rotation;
 	[SerializeField]
 	float rotSpeed;
+	[SerializeField]
+	Vector3 _offset;
 
 	// Use this for initialization
 	void Start () {
@@ -32,8 +34,8 @@ public class CameraFollow : MonoBehaviour {
 			rotation = 0.999f;
 		Vector3 offset = target.transform.forward * -1 * rotation + target.transform.up * (1 - rotation);
 		offset.Normalize ();
-		transform.position = target.transform.position + offset * distToPlayer;
-		transform.LookAt (target.transform);
+		transform.position = target.transform.position + offset * distToPlayer + _offset;
+		transform.LookAt (target.transform.position + _offset);
 
     }
 }
