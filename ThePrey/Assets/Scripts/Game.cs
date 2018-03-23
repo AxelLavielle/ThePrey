@@ -24,7 +24,7 @@ public class Game : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
     {
-        timer = 60f;
+        timer = 500f;
         mode = (GameModeEnum)GameMode.mode;
         player = GameObject.FindGameObjectWithTag("Player");
         GameObject[] list = GameObject.FindGameObjectsWithTag("NPC");

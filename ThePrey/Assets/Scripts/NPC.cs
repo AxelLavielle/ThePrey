@@ -19,9 +19,11 @@ public class NPC : MonoBehaviour {
     // public vars
     public float walkSpeed = 6;
 	public float rotateSpeed = 3;
+    public float fieldOfViewDegrees = 130;
+    public float viewDistance = 15;
 
-	// System vars
-	Vector3 moveAmount;
+    // System vars
+    Vector3 moveAmount;
 	Vector3 smoothMoveVelocity;
 	Rigidbody rigidbody;
 
@@ -33,7 +35,9 @@ public class NPC : MonoBehaviour {
 	public float maxStamina = 2;
     private float stamina;
 
-	void Awake() {
+    private List<GameObject> visible = new List<GameObject>();
+
+    void Awake() {
 		rigidbody = GetComponent<Rigidbody> ();
 		sneak = false;
 		run = true;
@@ -83,5 +87,45 @@ public class NPC : MonoBehaviour {
 		// Apply movement to rigidbody
 		Vector3 localMove = transform.TransformDirection(moveAmount) * Time.fixedDeltaTime;
 		rigidbody.MovePosition(rigidbody.position + localMove);
-	}
+
+        GetVision();
+    }
+
+    void GetVision()
+    {
+        visible.Clear();
+        GameObject[] temp = GameObject.FindGameObjectsWithTag("Visible");
+
+        Vector3 eyePos = transform.position;
+        eyePos.y += 2;
+
+        foreach(GameObject obj in temp)
+        {
+            RaycastHit hit;
+            Vector3 rayDirection = obj.transform.position - eyePos;
+
+            if ((Vector3.Angle(rayDirection, transform.forward)) <= fieldOfViewDegrees * 0.5f)
+            {
+                // Detect if object is within the field of view
+                if (Physics.Raycast(eyePos, rayDirection, out hit, viewDistance))
+                {
+                    visible.Add(obj);
+                }
+            }
+        }
+
+        RaycastHit hit2;
+        Vector3 playerPos = GameObject.FindGameObjectWithTag("Player").transform.position;
+        playerPos.y += 1.5f;
+        Vector3 rayDirection2 = playerPos - eyePos;
+
+        if ((Vector3.Angle(rayDirection2, transform.forward)) <= fieldOfViewDegrees * 0.5f)
+        {
+            // Detect if object is within the field of view
+            if (Physics.Raycast(eyePos, rayDirection2, out hit2, viewDistance))
+            {
+                visible.Add(GameObject.FindGameObjectWithTag("Player"));
+            }
+        }
+    }
 }
