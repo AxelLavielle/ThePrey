@@ -9,9 +9,7 @@ public class GameMenu : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        print("make pause menu inactive");
         mainCam = GameObject.Find("Main Camera");
-        //menuPause.SetActive(true);
 	}
 	
 	// Update is called once per frame
