@@ -12,32 +12,40 @@ public class Player : MonoBehaviour {
 	Vector3 moveAmount;
 	Vector3 smoothMoveVelocity;
 	Rigidbody rigidbody;
+    Animator _animator;
 
     // Footprints vars
     GameObject footprintCopy;
     bool nextIsLeft = true;
     float distanceSinceLastStep = 0;
 
+    //Animator vars
     bool sneak;
 	bool run;
+    bool walk;
+    bool attack;
+    public int life = 10;
 
-	// Ressources
-	public int life = 10;
-	public float maxStamina = 2;
+    // Ressources
+    public float maxStamina = 2;
     private float stamina;
 
     void Awake() {
-		Cursor.lockState = CursorLockMode.Locked;
+        _animator = GetComponent<Animator>();
+
+        Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
 		rigidbody = GetComponent<Rigidbody> ();
+        walk = false;
         sneak = false;
-		run = true;
+		run = false;
+        attack = false;
         stamina = maxStamina;
         footprintCopy = GameObject.FindGameObjectWithTag("Asset");
 	}
 
 	void Update() {
-
+        print(walk);
         // Calculate movement:
         float inputX = Input.GetAxisRaw("Horizontal");
 		float inputY = Input.GetAxisRaw("Vertical");
@@ -48,10 +56,12 @@ public class Player : MonoBehaviour {
 			targetMoveAmount /= 4;
 			run = false;
 			sneak = true;
-			stamina += Time.deltaTime;
+            walk = false;
+            stamina += Time.deltaTime;
 			if (stamina >= maxStamina)
 				stamina = maxStamina;
 		} else if (Input.GetButton ("Space") && (stamina == maxStamina || run)) {
+            walk = false;
 			sneak = false;
 			stamina -= Time.deltaTime;
 			run = true;
@@ -59,6 +69,7 @@ public class Player : MonoBehaviour {
 				run = false;
 			targetMoveAmount *= 1.75f;
 		} else {
+            walk = true;
 			run = false;
 			sneak = false;
 			stamina += Time.deltaTime;
@@ -66,10 +77,16 @@ public class Player : MonoBehaviour {
 				stamina = maxStamina;
 		}
 		moveAmount = Vector3.SmoothDamp(moveAmount,targetMoveAmount,ref smoothMoveVelocity,.15f);
+        if (moveAmount.x + moveAmount.y + moveAmount.z < 1 && moveAmount.x + moveAmount.y + moveAmount.z > -1)
+            walk = false;
 
-	}
+        _animator.SetBool("shoot", attack);
+        _animator.SetBool("walk", walk);
+        _animator.SetBool("run", run);
+        _animator.SetInteger("hp", life);
+    }
 
-	void FixedUpdate() {
+    void FixedUpdate() {
 		// Apply movement to rigidbody
 		Vector3 localMove = transform.TransformDirection(moveAmount) * Time.fixedDeltaTime;
 		rigidbody.MovePosition(rigidbody.position + localMove);
