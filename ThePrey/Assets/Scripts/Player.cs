@@ -6,6 +6,7 @@ public class Player : MonoBehaviour {
 	// public vars
 	public float walkSpeed = 6;
 	public float rotateSpeed = 3;
+    public bool isInBush = false;
 
 	// System vars
 	Vector3 moveAmount;
