@@ -98,6 +98,7 @@ public class Player : MonoBehaviour {
 
             ft.transform.localPosition = pos;
 
+            ft.tag = "Visible";
             Destroy(ft, 10);
         }
     }
