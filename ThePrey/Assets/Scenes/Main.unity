@@ -4618,7 +4618,7 @@ Prefab:
     - target: {fileID: 9500000, guid: 8941fc16923384943aacdcabfd6b93b3, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: ccf072c36244636489b74b2f0d8c2ac6, type: 2}
+      objectReference: {fileID: 9100000, guid: d841d1ba20a2f6f47a47b73920085fd6, type: 2}
     - target: {fileID: 400068, guid: 8941fc16923384943aacdcabfd6b93b3, type: 3}
       propertyPath: m_LocalScale.x
       value: 10
