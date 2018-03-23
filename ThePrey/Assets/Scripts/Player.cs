@@ -45,7 +45,6 @@ public class Player : MonoBehaviour {
 	}
 
 	void Update() {
-        print(walk);
         // Calculate movement:
         float inputX = Input.GetAxisRaw("Horizontal");
 		float inputY = Input.GetAxisRaw("Vertical");

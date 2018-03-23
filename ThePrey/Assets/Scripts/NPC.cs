@@ -30,6 +30,15 @@ public class NPC : MonoBehaviour {
 	bool sneak;
 	bool run;
 
+    Vector3 _target;
+    Vector3 _rotation;
+    Vector3 _vel;
+
+    float t = 0.4f;
+    float maxAcc = 0.1f;
+    float maxVel = 5;
+    float rotationSpeed = 35f;
+
 	// Ressources
 	public int life = 10;
 	public float maxStamina = 2;
@@ -87,7 +96,6 @@ public class NPC : MonoBehaviour {
 		// Apply movement to rigidbody
 		Vector3 localMove = transform.TransformDirection(moveAmount) * Time.fixedDeltaTime;
 		rigidbody.MovePosition(rigidbody.position + localMove);
-
         GetVision();
     }
 
@@ -127,5 +135,47 @@ public class NPC : MonoBehaviour {
                 visible.Add(GameObject.FindGameObjectWithTag("Player"));
             }
         }
+	}
+
+    float steeringRotation()
+    {
+        Vector3 dir = _target - transform.position;
+        Vector3 fwd = transform.forward;
+        float angle = Mathf.Atan2(fwd.z * dir.x - dir.z * fwd.x, fwd.x * dir.x + fwd.z * dir.z) * Mathf.Rad2Deg;
+        if (float.IsNaN(angle))
+            angle = 0f;
+        Vector3 desired = new Vector3(0, 5 * Mathf.Min(Mathf.Abs(angle), rotationSpeed) * angle / Mathf.Abs(angle), 0);
+        Vector3 steering = desired - _rotation;
+        _rotation += steering;
+        return (angle);
+    }
+
+    void steeringForward()
+    {
+        Vector3 dir = _target - transform.position;
+        dir = Vector3.Normalize(dir);
+        Vector3 acc = maxAcc * dir;
+        Vector3 steer_vel = rigidbody.velocity + acc * t;
+        float speed = Mathf.Sqrt(steer_vel.x * steer_vel.x + steer_vel.z * steer_vel.z);
+        if (speed > maxVel)
+            steer_vel = Vector3.Normalize(steer_vel) * maxVel;
+        _vel = steer_vel;
+    }
+
+    void steeringSeek()
+    {
+        Vector3 dir = _target - transform.position;
+        dir = Vector3.Normalize(dir);
+        Vector3 acc = maxAcc * dir;
+        Vector3 steer_vel = rigidbody.velocity + acc * t;
+        float speed = Mathf.Sqrt(steer_vel.x * steer_vel.x + steer_vel.z * steer_vel.z);
+        if (speed > maxVel)
+            steer_vel = Vector3.Normalize(steer_vel) * maxVel;
+        _vel = steer_vel;
+    }
+
+    public void setTarget(Vector3 target)
+    {
+        _target = target;
     }
 }
