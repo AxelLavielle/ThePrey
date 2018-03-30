@@ -23,14 +23,13 @@ public class Player : MonoBehaviour {
     bool sneak;
 	bool run;
     bool walk;
-    bool attack;
     public int life = 10;
 
     // Ressources
     public float maxStamina = 2;
     private float stamina;
 
-    void Awake() {
+	void Awake() {
         _animator = GetComponent<Animator>();
 
         Cursor.lockState = CursorLockMode.Locked;
@@ -39,7 +38,6 @@ public class Player : MonoBehaviour {
         walk = false;
         sneak = false;
 		run = false;
-        attack = false;
         stamina = maxStamina;
         footprintCopy = GameObject.FindGameObjectWithTag("Asset");
 	}
@@ -76,22 +74,35 @@ public class Player : MonoBehaviour {
 				stamina = maxStamina;
 		}
 		moveAmount = Vector3.SmoothDamp(moveAmount,targetMoveAmount,ref smoothMoveVelocity,.15f);
-        if (moveAmount.x + moveAmount.y + moveAmount.z < 1 && moveAmount.x + moveAmount.y + moveAmount.z > -1)
-            walk = false;
+		if (moveAmount.x + moveAmount.y + moveAmount.z < 1 && moveAmount.x + moveAmount.y + moveAmount.z > -1) {
+			walk = false;
+			run = false;
+		}
 
-        _animator.SetBool("shoot", attack);
         _animator.SetBool("walk", walk);
         _animator.SetBool("run", run);
         _animator.SetInteger("hp", life);
     }
 
-    void FixedUpdate() {
+	void OnMouseDown()
+	{
+		_animator.SetBool ("shoot", true);
+		transform.GetChild (0).gameObject.SetActive(true);
+	}
+
+	void OnMouseUp()
+	{
+		_animator.SetBool("shoot", false);
+		transform.GetChild (0).gameObject.SetActive(false);
+	}
+
+	void FixedUpdate() {
 		// Apply movement to rigidbody
 		Vector3 localMove = transform.TransformDirection(moveAmount) * Time.fixedDeltaTime;
 		rigidbody.MovePosition(rigidbody.position + localMove);
         distanceSinceLastStep += Mathf.Abs(localMove.x) + Mathf.Abs(localMove.y) + Mathf.Abs(localMove.z);
 
-        if(distanceSinceLastStep > 1)
+        if (distanceSinceLastStep > 1)
         {
             distanceSinceLastStep = 0;
 

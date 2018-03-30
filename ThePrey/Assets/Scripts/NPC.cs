@@ -178,4 +178,9 @@ public class NPC : MonoBehaviour {
     {
         _target = target;
     }
+
+	public void takeDamage()
+	{
+		life -= 1;
+	}
 }
