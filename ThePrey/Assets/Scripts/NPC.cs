@@ -20,7 +20,7 @@ public class NPC : MonoBehaviour {
     public float walkSpeed = 6;
 	public float rotateSpeed = 3;
     public float fieldOfViewDegrees = 130;
-    public float viewDistance = 15;
+    public float viewDistance = 10;
 
     // System vars
     Vector3 moveAmount;
