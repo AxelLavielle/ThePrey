@@ -118,4 +118,10 @@ public class Player : MonoBehaviour {
             Destroy(ft, 10);
         }
     }
+
+    public void hit()
+    {
+        life -= 1;
+        _animator.SetTrigger("hit");
+    }
 }

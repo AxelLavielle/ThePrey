@@ -21,6 +21,7 @@ public class NPC : MonoBehaviour {
 	public float rotateSpeed = 3;
     public float fieldOfViewDegrees = 130;
     public float viewDistance = 10;
+    public float shootTimer = 1f;
 
     // System vars
     Vector3 moveAmount;
@@ -64,6 +65,8 @@ public class NPC : MonoBehaviour {
         behavior behaviorRet = Behavior();
 		Vector3 targetMoveAmount = behaviorRet.movement * walkSpeed;
 
+        shootTimer -= Time.deltaTime;
+
         if (behaviorRet.type == 1) {
 			targetMoveAmount /= 4;
 			run = false;
@@ -97,6 +100,14 @@ public class NPC : MonoBehaviour {
 		Vector3 localMove = transform.TransformDirection(moveAmount) * Time.fixedDeltaTime;
 		rigidbody.MovePosition(rigidbody.position + localMove);
         GetVision();
+        foreach(GameObject obj in visible)
+        {
+            if (obj == GameObject.FindGameObjectWithTag("Player") && shootTimer <= 0)
+            {
+                shootPlayer();
+                shootTimer = 1f;
+            }
+        }
     }
 
     void GetVision()
@@ -117,7 +128,8 @@ public class NPC : MonoBehaviour {
                 // Detect if object is within the field of view
                 if (Physics.Raycast(eyePos, rayDirection, out hit, viewDistance))
                 {
-                    visible.Add(obj);
+                    if(hit.collider.gameObject == obj)
+                        visible.Add(obj);
                 }
             }
         }
@@ -132,7 +144,8 @@ public class NPC : MonoBehaviour {
             // Detect if object is within the field of view
             if (Physics.Raycast(eyePos, rayDirection2, out hit2, viewDistance))
             {
-                visible.Add(GameObject.FindGameObjectWithTag("Player"));
+                if(hit2.collider.gameObject == GameObject.FindGameObjectWithTag("Player"))
+                    visible.Add(GameObject.FindGameObjectWithTag("Player"));
             }
         }
 	}
@@ -177,5 +190,35 @@ public class NPC : MonoBehaviour {
     public void setTarget(Vector3 target)
     {
         _target = target;
+    }
+
+    void shootPlayer()
+    {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+        if(player != null)
+        {
+            RaycastHit hit;
+
+            Vector3 eyePos = transform.position;
+            eyePos.y += 1.5f;
+
+            Vector3 playerPos = player.transform.position;
+            playerPos.y += 1.5f;
+
+            Vector3 rayDirection2 = playerPos - eyePos;
+
+            if ((Vector3.Angle(rayDirection2, transform.forward)) <= fieldOfViewDegrees * 0.5f)
+            {
+                // Detect if object is within the field of view
+                if (Physics.Raycast(eyePos, rayDirection2, out hit, viewDistance))
+                {
+                    if (hit.collider.gameObject == player)
+                    {
+                        player.GetComponent<Player>().hit();
+                    }
+                }
+            }
+        }
     }
 }
