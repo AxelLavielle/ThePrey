@@ -88,7 +88,9 @@ public class Player : MonoBehaviour {
 	{
 		_animator.SetBool ("shoot", true);
 		transform.GetChild (0).gameObject.SetActive(true);
-	}
+        transform.GetChild(0).gameObject.GetComponent<HitMelee>().reset();
+
+    }
 
 	void OnMouseUp()
 	{
@@ -130,7 +132,7 @@ public class Player : MonoBehaviour {
         }
     }
 
-    public void hit()
+    public void takeDamage()
     {
         life -= 1;
         _animator.SetTrigger("hit");

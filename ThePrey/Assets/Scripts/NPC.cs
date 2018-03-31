@@ -27,9 +27,12 @@ public class NPC : MonoBehaviour {
     Vector3 moveAmount;
 	Vector3 smoothMoveVelocity;
 	Rigidbody rigidbody;
+    Animator _animator;
 
-	bool sneak;
-	bool run;
+    //Animator vars
+    bool walk;
+    bool run;
+    bool shoot;
 
     Vector3 _target;
     Vector3 _rotation;
@@ -49,7 +52,8 @@ public class NPC : MonoBehaviour {
 
     void Awake() {
 		rigidbody = GetComponent<Rigidbody> ();
-		sneak = false;
+        _animator = GetComponent<Animator>();
+        walk = false;
 		run = true;
         stamina = maxStamina;
 	}
@@ -70,12 +74,12 @@ public class NPC : MonoBehaviour {
         if (behaviorRet.type == 1) {
 			targetMoveAmount /= 4;
 			run = false;
-			sneak = true;
+			walk = true;
 			stamina += Time.deltaTime;
 			if (stamina >= maxStamina)
 				stamina = maxStamina;
 		} else if (behaviorRet.type == 2 && (stamina == maxStamina || run)) {
-			sneak = false;
+			walk = false;
 			stamina -= Time.deltaTime;
 			run = true;
 			if (stamina == 0)
@@ -83,11 +87,16 @@ public class NPC : MonoBehaviour {
 			targetMoveAmount *= 1.75f;
 		} else { /*walk or idle*/
 			run = false;
-			sneak = false;
+			walk = false;
 			stamina += Time.deltaTime;
 			if (stamina >= maxStamina)
 				stamina = maxStamina;
 		}
+
+        _animator.SetBool("walk", walk);
+        _animator.SetBool("run", run);
+        _animator.SetBool("shoot", shoot);
+        _animator.SetInteger("hp", life);
 
         // Must be NPC movements
         moveAmount = Vector3.SmoothDamp(moveAmount,targetMoveAmount,ref smoothMoveVelocity,.15f);
@@ -104,10 +113,16 @@ public class NPC : MonoBehaviour {
         {
             if (obj == GameObject.FindGameObjectWithTag("Player") && shootTimer <= 0)
             {
+                shoot = true;
+                run = false;
+                walk = false;
                 shootPlayer();
                 shootTimer = 1f;
+                return;
             }
         }
+        shoot = false;
+        run = true;
     }
 
     void GetVision()
@@ -195,6 +210,7 @@ public class NPC : MonoBehaviour {
 	public void takeDamage()
 	{
 		life -= 1;
+        _animator.SetTrigger("hit");
 	}
 
 	void shootPlayer()
@@ -220,7 +236,7 @@ public class NPC : MonoBehaviour {
                 {
                     if (hit.collider.gameObject == player)
                     {
-                        player.GetComponent<Player>().hit();
+                        player.GetComponent<Player>().takeDamage();
                     }
                 }
             }
