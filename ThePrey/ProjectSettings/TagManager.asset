@@ -7,6 +7,7 @@ TagManager:
   - Asset
   - NPC
   - Visible
+  - Heart
   layers:
   - Default
   - TransparentFX
