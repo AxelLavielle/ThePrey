@@ -62,7 +62,7 @@ public class Player : MonoBehaviour {
 			sneak = false;
 			stamina -= Time.deltaTime;
 			run = true;
-			if (stamina == 0)
+			if (stamina <= 0)
 				run = false;
 			targetMoveAmount *= 1.75f;
 		} else {

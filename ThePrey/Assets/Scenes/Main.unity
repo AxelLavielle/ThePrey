@@ -1016,13 +1016,6 @@ Transform:
   m_PrefabParentObject: {fileID: 4307329111730244, guid: 3b7e3181685934c48b446c8b49895823,
     type: 2}
   m_PrefabInternal: {fileID: 1709265685}
---- !u!81 &692235932
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 692235930}
-  m_Enabled: 1
 --- !u!1001 &761738732
 Prefab:
   m_ObjectHideFlags: 0
