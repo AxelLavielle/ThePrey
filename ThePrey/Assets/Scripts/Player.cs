@@ -135,6 +135,8 @@ public class Player : MonoBehaviour {
     public void takeDamage()
     {
         life -= 1;
+        GameObject[] list = GameObject.FindGameObjectsWithTag("Heart");
+        Destroy(list[0]);
         _animator.SetTrigger("hit");
     }
 }
