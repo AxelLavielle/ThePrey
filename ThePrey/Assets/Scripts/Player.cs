@@ -108,13 +108,13 @@ public class Player : MonoBehaviour {
         {
             distanceSinceLastStep = 0;
 
-            GameObject ft = Instantiate(footprintCopy, transform.parent);
-            ft.transform.SetPositionAndRotation(transform.localPosition, transform.localRotation);
+            GameObject ft = Instantiate(footprintCopy);
+            ft.transform.SetPositionAndRotation(transform.position, transform.rotation);
 
-            Quaternion rot = transform.localRotation;
+            Quaternion rot = transform.rotation;
             rot *= Quaternion.Euler(90, 0, 0);
 
-            ft.transform.localRotation = rot;
+            ft.transform.rotation = rot;
 
             if (nextIsLeft)
                 ft.transform.position -= ft.transform.right / 3;
@@ -122,10 +122,10 @@ public class Player : MonoBehaviour {
                 ft.transform.position += ft.transform.right / 3;
             nextIsLeft = !nextIsLeft;
 
-            Vector3 pos = ft.transform.localPosition;
-            pos.y = 0.0001f;
+            Vector3 pos = ft.transform.position;
+            pos.y = transform.position.y + 0.1f;
 
-            ft.transform.localPosition = pos;
+            ft.transform.position = pos;
 
             ft.tag = "Visible";
             Destroy(ft, 10);
