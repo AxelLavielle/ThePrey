@@ -108,7 +108,7 @@ public class Player : MonoBehaviour {
         {
             distanceSinceLastStep = 0;
 
-            GameObject ft = Instantiate(footprintCopy);
+            GameObject ft = Instantiate(footprintCopy, transform.parent);
             ft.transform.SetPositionAndRotation(transform.position, transform.rotation);
 
             Quaternion rot = transform.rotation;

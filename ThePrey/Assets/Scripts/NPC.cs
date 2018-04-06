@@ -237,6 +237,7 @@ public class NPC : MonoBehaviour {
                     if (hit.collider.gameObject == player)
                     {
                         player.GetComponent<Player>().takeDamage();
+                        GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip, 1.0f);
                     }
                 }
             }
