@@ -104,7 +104,7 @@ public class Player : MonoBehaviour {
 		rigidbody.MovePosition(rigidbody.position + localMove);
         distanceSinceLastStep += Mathf.Abs(localMove.x) + Mathf.Abs(localMove.y) + Mathf.Abs(localMove.z);
 
-        if (distanceSinceLastStep > 2)
+        if (distanceSinceLastStep > 2 && !sneak)
         {
             distanceSinceLastStep = 0;
 
