@@ -2423,7 +2423,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 692235930}
-  distToPlayer: 2
+  distToPlayer: 4
   rotation: 0.3
   rotSpeed: 15
   _offset: {x: 0, y: 1.25, z: 0}

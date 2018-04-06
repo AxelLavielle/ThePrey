@@ -74,7 +74,7 @@ public class Player : MonoBehaviour {
 				stamina = maxStamina;
 		}
 		moveAmount = Vector3.SmoothDamp(moveAmount,targetMoveAmount,ref smoothMoveVelocity,.15f);
-		if (moveAmount.x + moveAmount.y + moveAmount.z < 1 && moveAmount.x + moveAmount.y + moveAmount.z > -1) {
+		if (Mathf.Abs(moveAmount.x) + Mathf.Abs(moveAmount.y) + Mathf.Abs(moveAmount.z) < 1 && moveAmount.x + moveAmount.y + moveAmount.z > -1) {
 			walk = false;
 			run = false;
 		}
