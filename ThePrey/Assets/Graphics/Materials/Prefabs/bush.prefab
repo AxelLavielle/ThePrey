@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 114843102126360502}
   m_Layer: 0
   m_Name: bush
-  m_TagString: Untagged
+  m_TagString: Visible
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -68,7 +68,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1435822337944218}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 25.826862, y: 1.9642083e-16, z: -7.296007}
+  m_LocalPosition: {x: -399.8, y: -236.11658, z: -35.65}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children:
   - {fileID: 4277432296234160}
@@ -123,7 +123,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: a9983d5d0f9bde54fb0b08fde5bf3f02, type: 3}
+  - {fileID: 2100000, guid: c48af9065bee6f84ba74616a83cf530a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -180,7 +180,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 10, y: 10, z: 10}
-  m_Center: {x: 0, y: 15.5, z: 0}
+  m_Center: {x: 0, y: 0.59, z: 0}
 --- !u!114 &114843102126360502
 MonoBehaviour:
   m_ObjectHideFlags: 1
