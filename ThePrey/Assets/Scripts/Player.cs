@@ -13,8 +13,9 @@ public class Player : MonoBehaviour {
 	Vector3 smoothMoveVelocity;
 	Rigidbody rigidbody;
     Animator _animator;
+	GameObject staminabar;
 
-    // Footprints vars
+	// Footprints vars
     GameObject footprintCopy;
     bool nextIsLeft = true;
     float distanceSinceLastStep = 0;
@@ -40,6 +41,7 @@ public class Player : MonoBehaviour {
 		run = false;
         stamina = maxStamina;
         footprintCopy = GameObject.FindGameObjectWithTag("Asset");
+		staminabar = GameObject.FindGameObjectWithTag ("staminabar");
 	}
 
 	void Update() {
@@ -82,6 +84,7 @@ public class Player : MonoBehaviour {
         _animator.SetBool("walk", walk);
         _animator.SetBool("run", run);
         _animator.SetInteger("hp", life);
+		staminabar.GetComponent<RectTransform>().sizeDelta = new Vector2(500 * stamina, 50);
     }
 
 	void OnMouseDown()
@@ -136,7 +139,12 @@ public class Player : MonoBehaviour {
     {
         life -= 1;
         GameObject[] list = GameObject.FindGameObjectsWithTag("Heart");
-        Destroy(list[0]);
+		GameObject min;
+		min = list [0];
+    	foreach (GameObject g in list)
+			if (g.name [7] > min.name [7])
+				min = g;
+        Destroy(min);
         _animator.SetTrigger("hit");
     }
 }
