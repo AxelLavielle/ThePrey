@@ -131,7 +131,7 @@ public class Player : MonoBehaviour {
 
             ft.transform.position = pos;
             ft.tag = "Visible";
-            Destroy(ft, 10);
+            Destroy(ft, 30);
         }
     }
 
@@ -139,11 +139,11 @@ public class Player : MonoBehaviour {
     {
         life -= 1;
         GameObject[] list = GameObject.FindGameObjectsWithTag("Heart");
-		GameObject min;
-		min = list [0];
-    	foreach (GameObject g in list)
-			if (g.name [7] > min.name [7])
-				min = g;
+        GameObject min;
+        min = list[0];
+        foreach (GameObject g in list)
+            if (g.name[7] > min.name[7])
+                min = g;
         Destroy(min);
         _animator.SetTrigger("hit");
     }
