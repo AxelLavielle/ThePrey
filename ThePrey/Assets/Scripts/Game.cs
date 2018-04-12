@@ -50,7 +50,10 @@ public class Game : MonoBehaviour {
         for(int i = NPCs.Count - 1; i >= 0; --i)
         {
             if (NPCs[i].GetComponent<NPC>().life <= 0)
+            {
                 NPCs.RemoveAt(i);
+                GetComponent<NPCHandler>().removeNPC(NPCs[i]);
+            }
         }
     }
 

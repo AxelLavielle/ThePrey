@@ -170,4 +170,16 @@ public class NPCHandler : MonoBehaviour {
     {
         return generalBehavior;
     }
+
+    public void removeNPC(GameObject npc)
+    {
+        int i = 0;
+        while(i < NPCInfos.Count)
+        {
+            if (NPCInfos[i].GetGameObject() == npc)
+                break;
+            i++;
+        }
+        NPCInfos.RemoveAt(i);
+    }
 }
