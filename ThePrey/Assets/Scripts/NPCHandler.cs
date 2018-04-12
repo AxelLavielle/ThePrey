@@ -132,7 +132,7 @@ public class NPCHandler : MonoBehaviour {
 
     private void CheckBehaviour(GameObject npc, NPC.BehaviourType bhv)
     {
-        if(bhv > generalBehavior)
+        if(bhv > generalBehavior && bhv != NPC.BehaviourType.Bush)
         {
             generalBehavior = bhv;
             foreach(NPCInfo inf in NPCInfos)
