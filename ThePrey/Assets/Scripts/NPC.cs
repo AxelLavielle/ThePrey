@@ -69,7 +69,8 @@ public class NPC : MonoBehaviour {
 
     behaviour behaviourRet;
     Vector3 playerLastPos;
-    bool seen;
+    bool playerSeen;
+    float playerSeenTimer = 0;
 
     MeshRenderer ground;
 
@@ -85,7 +86,7 @@ public class NPC : MonoBehaviour {
 		rigidbody = GetComponent<Rigidbody> ();
         _animator = GetComponent<Animator>();
         behaviourRet = Behaviour();
-        seen = false;
+        playerSeen = false;
         ground = GameObject.Find("Plane").GetComponent<MeshRenderer>();
         //sneak = false;
 		run = false;
@@ -176,6 +177,15 @@ public class NPC : MonoBehaviour {
             else
                 bushTimer -= Time.deltaTime;
         }
+        if (playerSeen)
+        {
+            playerSeenTimer += Time.deltaTime;
+            if (playerSeenTimer >= 10)
+            {
+                playerSeenTimer = 0;
+                playerSeen = false;
+            }
+        }
         _animator.SetBool("walk", walk);
         _animator.SetBool("run", run);
         _animator.SetBool("shoot", shoot);
@@ -207,6 +217,7 @@ public class NPC : MonoBehaviour {
                     priority = 3;
                     b.target = obj.gameObject.transform.position;
                     playerLastPos = b.target;
+                    playerSeen = true;
                     return b;
                 case "bush":
                     print("Checking nearby bush");
@@ -231,6 +242,11 @@ public class NPC : MonoBehaviour {
                 default:
                     break;
             }
+        }
+        if (priority < 3 && playerSeen)
+        {
+            b.target = playerLastPos;
+            b.type = BehaviourType.Track;
         }
         if (priority == 0 && wanderTimer <= 0)
         {
