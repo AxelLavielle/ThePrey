@@ -65,22 +65,19 @@ public class NPCHandler : MonoBehaviour {
         {
             newLeader.SetLeader(true);
             newLeader.GetGameObject().GetComponent<NPC>().setFormation(newLeader.GetGameObject(), Vector3.zero);
-            SetBestNPCForOffset(newLeader.GetGameObject(), LeftLine);
-            SetBestNPCForOffset(newLeader.GetGameObject(), RightLine);
+            SetBestNPCForOffset(newLeader.GetGameObject(), LeftLine, RightLine);
         }
         else if(generalBehavior == NPC.BehaviourType.Track)
         {
             newLeader.SetLeader(true);
             newLeader.GetGameObject().GetComponent<NPC>().setFormation(newLeader.GetGameObject(), Vector3.zero);
-            SetBestNPCForOffset(newLeader.GetGameObject(), LeftTrackV);
-            SetBestNPCForOffset(newLeader.GetGameObject(), RightTrackV);
+            SetBestNPCForOffset(newLeader.GetGameObject(), LeftTrackV, RightTrackV);
         }
         else if (generalBehavior == NPC.BehaviourType.Attack)
         {
             newLeader.SetLeader(true);
             newLeader.GetGameObject().GetComponent<NPC>().setFormation(newLeader.GetGameObject(), Vector3.zero);
-            SetBestNPCForOffset(newLeader.GetGameObject(), LeftAttackV);
-            SetBestNPCForOffset(newLeader.GetGameObject(), RightAttackV);
+            SetBestNPCForOffset(newLeader.GetGameObject(), LeftAttackV, RightAttackV);
         }
     }
 
@@ -104,9 +101,9 @@ public class NPCHandler : MonoBehaviour {
         return res;
     }
 
-    private void SetBestNPCForOffset(GameObject leader, Vector3 offset)
+    private void SetBestNPCForOffset(GameObject leader, Vector3 offsetLeft, Vector3 offsetRight)
     {
-        Vector3 target = leader.transform.TransformPoint(offset);
+        Vector3 target = leader.transform.TransformPoint(offsetLeft);
         GameObject res = NPCInfos[0].GetGameObject();
         for (int i = 0; i < NPCInfos.Count; ++i)
         {
@@ -118,7 +115,17 @@ public class NPCHandler : MonoBehaviour {
                 res = NPCInfos[i].GetGameObject();
         }
         if (res != leader)
-            res.GetComponent<NPC>().setFormation(leader, offset);
+        {
+            res.GetComponent<NPC>().setFormation(leader, offsetLeft);
+            if (NPCInfos.Count == 3)
+            {
+                foreach (NPCInfo inf in NPCInfos)
+                {
+                    if(inf.GetGameObject() != res && !inf.IsLeader())
+                        inf.GetGameObject().GetComponent<NPC>().setFormation(leader, offsetRight);
+                }
+            }
+        }
     }
 
     public void SetNPCBehavior(GameObject npc, NPC.BehaviourType newBehaviour)
@@ -145,6 +152,7 @@ public class NPCHandler : MonoBehaviour {
                 break;
             }
         }
+
         if ((bhv > generalBehavior && bhv != NPC.BehaviourType.Bush) || leaderOrder)
         {
             generalBehavior = bhv;
