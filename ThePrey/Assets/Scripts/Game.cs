@@ -20,6 +20,8 @@ public class Game : MonoBehaviour {
 
     private GameObject player;
     private List<GameObject> NPCs = new List<GameObject>();
+    bool b;
+    public GameObject map;
 
 	// Use this for initialization
 	void Start ()
@@ -43,6 +45,12 @@ public class Game : MonoBehaviour {
         timerLabel.text = string.Format("{0:00} : {1:00} : {2:000}", minutes, seconds, fraction);
         CheckNPC();
         CheckDefWin();
+
+        if (Input.GetKeyDown("m"))
+        {
+            map.SetActive(b);
+            b = !b;
+        }
     }
 
     void CheckNPC()
