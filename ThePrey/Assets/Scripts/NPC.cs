@@ -43,14 +43,13 @@ public class NPC : MonoBehaviour {
     // System vars
     Vector3 moveAmount;
 	Vector3 smoothMoveVelocity;
-	Rigidbody rigidbody;
+	Rigidbody rgbd;
     Animator _animator;
 
     //Animator vars
     bool walk;
     bool run;
     bool shoot;
-//    bool flee;
     bool attack;
     bool cover;
 
@@ -88,7 +87,7 @@ public class NPC : MonoBehaviour {
     private List<GameObject> visible = new List<GameObject>();
 
     void Awake() {
-		rigidbody = GetComponent<Rigidbody> ();
+		rgbd = GetComponent<Rigidbody> ();
         _animator = GetComponent<Animator>();
         behaviourRet = Behaviour();
         playerSeen = false;
@@ -132,7 +131,7 @@ public class NPC : MonoBehaviour {
                 {
                     run = true;
                     walk = false;
-                    shoot = false;
+                    //shoot = false;
                     break;
                 }
                 if (gameObject != leader &&
@@ -174,6 +173,7 @@ public class NPC : MonoBehaviour {
             case BehaviourType.Flee:
                 _vel *= -1;
                 walk = true;
+                shoot  =false;
                 upStamina();
                 break;
             default:
@@ -189,11 +189,8 @@ public class NPC : MonoBehaviour {
         shootTimer -= Time.deltaTime;
         behaviourRet = ChooseBehaviour(behaviourRet);
         handler.SetNPCBehavior(gameObject, behaviourRet.type);
-        //_target = behaviourRet.target;
         if (Vector3.Distance(gameObject.transform.position, _target) < avoidTargetRadius)
             _target = _pathfinder.getPosition(gameObject.transform.position, behaviourRet.target);
-
-        //print(name + " - " + behaviourRet.type);
         updateBehaviour();
         if (bushes.Count > 0)
         {
@@ -241,7 +238,7 @@ public class NPC : MonoBehaviour {
                 case "Player":
                     if (Vector3.Distance(obj.gameObject.transform.position, gameObject.transform.position) > shootDistance)
                         b.type = BehaviourType.Track;
-                    else if (obj.GetComponent<Player>().life > 5 && Vector3.Distance(obj.gameObject.transform.position, gameObject.transform.position) < 10)
+                    else if (obj.GetComponent<Player>().life > 5 && Vector3.Distance(obj.gameObject.transform.position, gameObject.transform.position) < 5)
                         b.type = BehaviourType.Flee;
                     else
                         b.type = BehaviourType.Attack;
@@ -354,7 +351,7 @@ public class NPC : MonoBehaviour {
         Vector3 dir = _target - transform.position;
         dir = Vector3.Normalize(dir);
         Vector3 acc = maxAcc * dir;
-        Vector3 steer_vel = rigidbody.velocity + acc * t;
+        Vector3 steer_vel = rgbd.velocity + acc * t;
         float speed = Mathf.Sqrt(steer_vel.x * steer_vel.x + steer_vel.z * steer_vel.z);
         if (speed > maxVel)
             steer_vel = Vector3.Normalize(steer_vel) * maxVel;
