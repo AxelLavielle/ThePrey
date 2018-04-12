@@ -51,7 +51,7 @@ public class Player : MonoBehaviour {
 
         Vector3 moveDir = new Vector3(inputX, 0, inputY).normalized;
 		Vector3 targetMoveAmount = moveDir * walkSpeed;
-		if (Input.GetButton ("Shift")) {
+		if (Input.GetButton ("Sneak")) {
 			targetMoveAmount /= 4;
 			run = false;
 			sneak = true;
@@ -59,7 +59,7 @@ public class Player : MonoBehaviour {
             stamina += Time.deltaTime;
 			if (stamina >= maxStamina)
 				stamina = maxStamina;
-		} else if (Input.GetButton ("Space") && (stamina == maxStamina || run)) {
+		} else if (Input.GetButton ("Sprint") && (stamina == maxStamina || run)) {
             walk = false;
 			sneak = false;
 			stamina -= Time.deltaTime;
