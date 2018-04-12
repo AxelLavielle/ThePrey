@@ -20,12 +20,12 @@ public class NPCHandler : MonoBehaviour {
         public void SetBehaviour(NPC.BehaviourType newBehaviour) { behaviour = newBehaviour; }
     };
 
-    Vector3 LeftLine = new Vector3(-10, 0, 0);
-    Vector3 RightLine = new Vector3(10, 0, 0);
+    Vector3 LeftLine = new Vector3(-5, 0, 0);
+    Vector3 RightLine = new Vector3(5, 0, 0);
     Vector3 LeftTrackV = new Vector3(-5, 0, 5);
     Vector3 RightTrackV = new Vector3(5, 0, 5);
-    Vector3 LeftAttackV = new Vector3(-10, 0, 5);
-    Vector3 RightAttackV = new Vector3(10, 0, 5);
+    Vector3 LeftAttackV = new Vector3(-2, 0, 2);
+    Vector3 RightAttackV = new Vector3(2, 0, 2);
 
     List<NPCInfo> NPCInfos = new List<NPCInfo>();
 
@@ -45,19 +45,8 @@ public class NPCHandler : MonoBehaviour {
         }
         generalBehavior = NPC.BehaviourType.Wander;
 
-        SetFormation(NPCInfos[0]);
+        SetFormation(GetMiddleNPC());
 	}
-
-    private void FixedUpdate()
-    {
-        foreach(NPCInfo inf in NPCInfos)
-        {
-            if(inf.GetBehaviour() != NPC.BehaviourType.Formation && !inf.IsLeader())
-            {
-                ResetFormation();
-            }
-        }
-    }
 
     private void ResetFormation()
     {
@@ -68,39 +57,34 @@ public class NPCHandler : MonoBehaviour {
         }
     }
 
-    private void SetFormation(NPCInfo leader)
+    private void SetFormation(NPCInfo newLeader)
     {
+        foreach (NPCInfo inf in NPCInfos)
+            inf.SetLeader(false);
         if (generalBehavior == NPC.BehaviourType.Wander)
         {
-            GameObject temp = GetMiddleNPC();
-            foreach (NPCInfo inf in NPCInfos)
-            {
-                if (inf.GetGameObject() == temp)
-                {
-                    inf.SetLeader(true);
-                    inf.GetGameObject().GetComponent<NPC>().setFormation(temp, Vector3.zero);
-                    SetBestNPCForOffset(temp, LeftLine);
-                    SetBestNPCForOffset(temp, RightLine);
-                }
-            }
+            newLeader.SetLeader(true);
+            newLeader.GetGameObject().GetComponent<NPC>().setFormation(newLeader.GetGameObject(), Vector3.zero);
+            SetBestNPCForOffset(newLeader.GetGameObject(), LeftLine);
+            SetBestNPCForOffset(newLeader.GetGameObject(), RightLine);
         }
         else if(generalBehavior == NPC.BehaviourType.Track)
         {
-            leader.SetLeader(true);
-            leader.GetGameObject().GetComponent<NPC>().setFormation(leader.GetGameObject(), Vector3.zero);
-            SetBestNPCForOffset(leader.GetGameObject(), LeftTrackV);
-            SetBestNPCForOffset(leader.GetGameObject(), RightTrackV);
+            newLeader.SetLeader(true);
+            newLeader.GetGameObject().GetComponent<NPC>().setFormation(newLeader.GetGameObject(), Vector3.zero);
+            SetBestNPCForOffset(newLeader.GetGameObject(), LeftTrackV);
+            SetBestNPCForOffset(newLeader.GetGameObject(), RightTrackV);
         }
         else if (generalBehavior == NPC.BehaviourType.Attack)
         {
-            leader.SetLeader(true);
-            leader.GetGameObject().GetComponent<NPC>().setFormation(leader.GetGameObject(), Vector3.zero);
-            SetBestNPCForOffset(leader.GetGameObject(), LeftAttackV);
-            SetBestNPCForOffset(leader.GetGameObject(), RightAttackV);
+            newLeader.SetLeader(true);
+            newLeader.GetGameObject().GetComponent<NPC>().setFormation(newLeader.GetGameObject(), Vector3.zero);
+            SetBestNPCForOffset(newLeader.GetGameObject(), LeftAttackV);
+            SetBestNPCForOffset(newLeader.GetGameObject(), RightAttackV);
         }
     }
 
-    private GameObject GetMiddleNPC()
+    private NPCInfo GetMiddleNPC()
     {
         Vector3 average = Vector3.zero;
         for(int i = 0; i < NPCInfos.Count; ++i)
@@ -108,13 +92,13 @@ public class NPCHandler : MonoBehaviour {
             average += NPCInfos[i].GetGameObject().transform.position;
         }
         average /= NPCInfos.Count;
-        GameObject res = NPCInfos[0].GetGameObject();
+        NPCInfo res = NPCInfos[0];
         for (int i = 0; i < NPCInfos.Count; ++i)
         {
-            float dist0 = Mathf.Sqrt(Mathf.Pow(average.x - res.transform.position.x, 2) + Mathf.Pow(average.z - res.transform.position.z, 2));
+            float dist0 = Mathf.Sqrt(Mathf.Pow(average.x - res.GetGameObject().transform.position.x, 2) + Mathf.Pow(average.z - res.GetGameObject().transform.position.z, 2));
             float dist1 = Mathf.Sqrt(Mathf.Pow(average.x - NPCInfos[i].GetGameObject().transform.position.x, 2) + Mathf.Pow(average.z - NPCInfos[i].GetGameObject().transform.position.z, 2));
             if (dist1 < dist0)
-                res = NPCInfos[i].GetGameObject();
+                res = NPCInfos[i];
         }
 
         return res;
@@ -164,12 +148,14 @@ public class NPCHandler : MonoBehaviour {
         if ((bhv > generalBehavior && bhv != NPC.BehaviourType.Bush) || leaderOrder)
         {
             generalBehavior = bhv;
-            foreach(NPCInfo inf in NPCInfos)
+            foreach (NPCInfo inf in NPCInfos)
             {
-                if(inf.GetGameObject() == npc)
+                if (inf.GetGameObject() == npc)
                     SetFormation(inf);
             }
         }
+        else
+            ResetFormation();
     }
 
     public NPC.BehaviourType GetGeneralBehaviour()
