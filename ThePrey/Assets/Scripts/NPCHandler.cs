@@ -142,4 +142,9 @@ public class NPCHandler : MonoBehaviour {
             }
         }
     }
+
+    public NPC.BehaviourType GetGeneralBehaviour()
+    {
+        return generalBehavior;
+    }
 }
