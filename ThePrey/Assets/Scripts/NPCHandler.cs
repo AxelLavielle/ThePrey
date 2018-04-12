@@ -171,7 +171,7 @@ public class NPCHandler : MonoBehaviour {
                     SetFormation(inf);
             }
         }
-        else if( bhv == NPC.BehaviourType.Bush)
+        else if( bhv != NPC.BehaviourType.Bush)
             ResetFormation();
     }
 
