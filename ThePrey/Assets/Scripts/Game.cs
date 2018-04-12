@@ -57,6 +57,16 @@ public class Game : MonoBehaviour {
                 //Destroy(NPCs[i]);
             }
         }
+<<<<<<< HEAD
+=======
+        if(destroy)
+        {
+            GetComponent<NPCHandler>().removeNPC(NPCs[index]);
+
+            NPCs.RemoveAt(index);
+            Destroy(NPCs[index]);
+        }
+>>>>>>> parent of 7ac887a... 
     }
 
     void CheckDefWin()
