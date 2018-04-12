@@ -152,7 +152,16 @@ public class NPCHandler : MonoBehaviour {
 
     private void CheckBehaviour(GameObject npc, NPC.BehaviourType bhv)
     {
-        if(bhv > generalBehavior && bhv != NPC.BehaviourType.Bush)
+        bool leaderOrder = false;
+        foreach (NPCInfo inf in NPCInfos)
+        {
+            if (inf.GetGameObject() == npc)
+            {
+                leaderOrder = inf.IsLeader();
+                break;
+            }
+        }
+        if ((bhv > generalBehavior && bhv != NPC.BehaviourType.Bush) || leaderOrder)
         {
             generalBehavior = bhv;
             foreach(NPCInfo inf in NPCInfos)
