@@ -59,11 +59,10 @@ public class Game : MonoBehaviour {
         }
         if(destroy)
         {
-            GameObject temp = NPCs[index];
-            GetComponent<NPCHandler>().removeNPC(temp);
-            
+            GetComponent<NPCHandler>().removeNPC(NPCs[index]);
+
             NPCs.RemoveAt(index);
-            Destroy(temp);
+            Destroy(NPCs[index]);
         }
     }
 
