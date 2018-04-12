@@ -190,6 +190,6 @@ public class NPCHandler : MonoBehaviour {
             i++;
         }
         NPCInfos.RemoveAt(i);
-        ResetFormation();
+        SetFormation(GetMiddleNPC());
     }
 }

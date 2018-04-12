@@ -43,7 +43,7 @@ public class NPC : MonoBehaviour {
     // System vars
     Vector3 moveAmount;
 	Vector3 smoothMoveVelocity;
-	Rigidbody rigidbody;
+	Rigidbody rgbd;
     Animator _animator;
     float fleeTimer = 0;
     float shootAnimTimer = 0;
@@ -52,7 +52,7 @@ public class NPC : MonoBehaviour {
     bool walk;
     bool run;
     bool shoot;
-//    bool flee;
+    //    bool flee;
     bool attack;
     bool cover;
 
@@ -90,7 +90,7 @@ public class NPC : MonoBehaviour {
     private List<GameObject> visible = new List<GameObject>();
 
     void Awake() {
-		rigidbody = GetComponent<Rigidbody> ();
+		rgbd = GetComponent<Rigidbody> ();
         _animator = GetComponent<Animator>();
         behaviourRet = Behaviour();
         playerSeen = false;
@@ -380,7 +380,7 @@ public class NPC : MonoBehaviour {
         Vector3 dir = _target - transform.position;
         dir = Vector3.Normalize(dir);
         Vector3 acc = maxAcc * dir;
-        Vector3 steer_vel = rigidbody.velocity + acc * t;
+        Vector3 steer_vel = rgbd.velocity + acc * t;
         float speed = Mathf.Sqrt(steer_vel.x * steer_vel.x + steer_vel.z * steer_vel.z);
         if (speed > maxVel)
             steer_vel = Vector3.Normalize(steer_vel) * maxVel;
