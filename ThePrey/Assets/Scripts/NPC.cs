@@ -207,7 +207,7 @@ public class NPC : MonoBehaviour {
             switch (obj.name)
             {
                 case "Player":
-                    print("SEEN PLAYER : life  = " + life);
+                    //print("SEEN PLAYER : life  = " + life);
                     if (Vector3.Distance(obj.gameObject.transform.position, gameObject.transform.position) > shootDistance)
                         b.type = BehaviourType.Track;
                     else if (obj.GetComponent<Player>().life > 5 && Vector3.Distance(obj.gameObject.transform.position, gameObject.transform.position) < 10)
@@ -220,7 +220,7 @@ public class NPC : MonoBehaviour {
                     playerSeen = true;
                     return b;
                 case "bush":
-                    print("Checking nearby bush");
+                    //print("Checking nearby bush");
                     if (priority >= 2 || b.target == obj.transform.position || bushes.Contains(obj.gameObject.transform.position))
                         break;
                     b.type = BehaviourType.Bush;
@@ -228,7 +228,7 @@ public class NPC : MonoBehaviour {
                     priority = 1;
                     break; 
                 case "footprint":
-                   print("tracking footprints");
+                   //print("tracking footprints");
                     if (priority >= 3)
                         break;
                     b.type = BehaviourType.Track;
@@ -243,21 +243,22 @@ public class NPC : MonoBehaviour {
                     break;
             }
         }
+        print("prio = " + priority + " wander time = " + wanderTimer);
         if (priority < 3 && playerSeen)
         {
             b.target = playerLastPos;
             b.type = BehaviourType.Track;
         }
-        if (priority == 0 && wanderTimer <= 0)
+        else if (priority == 0 && wanderTimer <= 0)
         {
             wanderTimer = 1;
-            //print("Looking for signs");
+            print("Looking for signs");
             b.type = BehaviourType.Wander;
             b.target = gameObject.transform.position;
             b.target.z += wanderDir;
             b.target.x += Random.Range(-15, 15);
             //print(gameObject.transform.position);
-            //print(b.target);
+            print(b.target);
         }
         else if (priority == 0)
             wanderTimer -= Time.deltaTime;
@@ -340,20 +341,23 @@ public class NPC : MonoBehaviour {
 
     Vector3 CheckBorder(Vector3 pos)
     {
-        if (pos.x < ground.bounds.min.x)
+        print("max z - 1: " + (ground.bounds.max.z - 1) + " min z + 1 : " + (ground.bounds.min.z + 1) + " current z : " + pos.z);
+        if (pos.z < ground.bounds.min.z + 0.5)
         {
-            pos.x = ground.bounds.min.x;
-            wanderDir *= -1;
+            pos.z = ground.bounds.min.z + 0.7f;
+            wanderDir = 10;
+            print("reverse dir");
         }
-        else if (pos.x > ground.bounds.max.x)
+        else if (pos.z > ground.bounds.max.z - 0.5)
         {
+            pos.z = ground.bounds.max.z - 0.7f;
+            wanderDir = -10;
+            print("reverse dir");
+        }
+        if (pos.x > ground.bounds.max.x)
             pos.x = ground.bounds.max.x;
-            wanderDir *= -1;
-        }
-        if (pos.z > ground.bounds.max.z)
-            pos.z = ground.bounds.max.z;
-        else if (pos.z < ground.bounds.min.z)
-            pos.z = ground.bounds.min.z;
+        else if (pos.x < ground.bounds.min.x)
+            pos.x = ground.bounds.min.x;
         return pos;
     }
 
