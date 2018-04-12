@@ -238,7 +238,7 @@ Transform:
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_Children: []
   m_Father: {fileID: 1374399164}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!135 &10714661
 SphereCollider:
@@ -1140,7 +1140,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1374399164}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 180}
 --- !u!81 &289555870
 AudioListener:
@@ -3785,7 +3785,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4721304304691630, guid: 1a532563bae5af24e8be426999b52d8d, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -389.8
+      value: -379.1
       objectReference: {fileID: 0}
     - target: {fileID: 4721304304691630, guid: 1a532563bae5af24e8be426999b52d8d, type: 2}
       propertyPath: m_LocalPosition.y
@@ -3977,7 +3977,7 @@ RectTransform:
   - {fileID: 490323099}
   - {fileID: 624096704}
   m_Father: {fileID: 1374399164}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -4677,10 +4677,10 @@ Transform:
   m_LocalPosition: {x: 390, y: 236.11658, z: 11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1148344064}
-  - {fileID: 289555869}
   - {fileID: 1833326288}
   - {fileID: 10714660}
+  - {fileID: 289555869}
+  - {fileID: 1148344064}
   - {fileID: 231667672}
   - {fileID: 110894340}
   - {fileID: 139544940}
@@ -5744,15 +5744,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4504427621420804, guid: 3b7e3181685934c48b446c8b49895823, type: 2}
       propertyPath: m_LocalScale.x
-      value: 1
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 4504427621420804, guid: 3b7e3181685934c48b446c8b49895823, type: 2}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 4504427621420804, guid: 3b7e3181685934c48b446c8b49895823, type: 2}
       propertyPath: m_LocalScale.z
-      value: 1
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 114406836510061836, guid: 3b7e3181685934c48b446c8b49895823,
         type: 2}
@@ -6462,7 +6462,7 @@ RectTransform:
   - {fileID: 1384045175}
   - {fileID: 1546665956}
   m_Father: {fileID: 1374399164}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

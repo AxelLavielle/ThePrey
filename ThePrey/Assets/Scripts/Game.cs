@@ -51,10 +51,8 @@ public class Game : MonoBehaviour {
         {
             if (NPCs[i].GetComponent<NPC>().life <= 0)
             {
-                GetComponent<NPCHandler>().removeNPC(NPCs[i]);
-
                 NPCs.RemoveAt(i);
-                //Destroy(NPCs[i]);
+                GetComponent<NPCHandler>().removeNPC(NPCs[i]);
             }
         }
     }

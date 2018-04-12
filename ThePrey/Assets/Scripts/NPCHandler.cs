@@ -162,7 +162,7 @@ public class NPCHandler : MonoBehaviour {
             }
         }
 
-        if ((bhv > generalBehavior && bhv != NPC.BehaviourType.Bush && bhv != NPC.BehaviourType.Flee) || leaderOrder)
+        if ((bhv > generalBehavior && bhv != NPC.BehaviourType.Bush) || leaderOrder)
         {
             generalBehavior = bhv;
             foreach (NPCInfo inf in NPCInfos)
@@ -171,7 +171,7 @@ public class NPCHandler : MonoBehaviour {
                     SetFormation(inf);
             }
         }
-        else if(bhv != NPC.BehaviourType.Bush && bhv != NPC.BehaviourType.Flee)
+        else if( bhv != NPC.BehaviourType.Bush)
             ResetFormation();
     }
 
@@ -190,6 +190,5 @@ public class NPCHandler : MonoBehaviour {
             i++;
         }
         NPCInfos.RemoveAt(i);
-        SetFormation(GetMiddleNPC());
     }
 }
