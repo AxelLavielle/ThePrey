@@ -47,22 +47,15 @@ public class Game : MonoBehaviour {
 
     void CheckNPC()
     {
-        bool destroy = false;
-        int index = 0;
         for(int i = NPCs.Count - 1; i >= 0; --i)
         {
             if (NPCs[i].GetComponent<NPC>().life <= 0)
             {
-                destroy = true;
-                index = i;
-            }
-        }
-        if(destroy)
-        {
-            GetComponent<NPCHandler>().removeNPC(NPCs[index]);
+                GetComponent<NPCHandler>().removeNPC(NPCs[i]);
 
-            NPCs.RemoveAt(index);
-            Destroy(NPCs[index]);
+                NPCs.RemoveAt(i);
+                //Destroy(NPCs[i]);
+            }
         }
     }
 
