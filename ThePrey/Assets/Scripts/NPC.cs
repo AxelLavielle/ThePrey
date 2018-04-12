@@ -90,7 +90,6 @@ public class NPC : MonoBehaviour {
         behaviourRet = Behaviour();
         playerSeen = false;
         ground = GameObject.Find("Plane").GetComponent<MeshRenderer>();
-        //sneak = false;
 		run = false;
         attack = false;
         stamina = maxStamina;
@@ -112,6 +111,8 @@ public class NPC : MonoBehaviour {
 
     void updateBehaviour()
     {
+        if (behaviourRet.type == BehaviourType.Formation)
+            _target = leader.transform.TransformPoint(offset);
         if (behaviourRet.type != BehaviourType.Attack)
         {
             steeringSeek();
@@ -152,7 +153,6 @@ public class NPC : MonoBehaviour {
                 run = true;
                 walk = false;
                 shoot = false;
-                behaviourRet.target = leader.transform.TransformPoint(offset);
                 break;
             default:
                 run = false;
@@ -168,6 +168,7 @@ public class NPC : MonoBehaviour {
         behaviourRet = ChooseBehaviour(behaviourRet);
         handler.SetNPCBehavior(gameObject, behaviourRet.type);
         _target = behaviourRet.target;
+        //print(name + " - " + behaviourRet.type);
         updateBehaviour();
         if (bushes.Count > 0)
         {
@@ -204,6 +205,7 @@ public class NPC : MonoBehaviour {
     {
         GetVision();
         int priority = 0;
+        int formationPrio = (int)handler.GetGeneralBehaviour();
         foreach (GameObject obj in visible)
         {
             switch (obj.name)
@@ -221,14 +223,14 @@ public class NPC : MonoBehaviour {
                     playerSeen = true;
                     return b;
                 case "bush":
-                    if (priority >= 2 || b.target == obj.transform.position || bushes.Contains(obj.gameObject.transform.position))
+                    if (formationPrio >= 2 || priority >= 2 || b.target == obj.transform.position || bushes.Contains(obj.gameObject.transform.position))
                         break;
                     b.type = BehaviourType.Bush;
                     b.target = obj.gameObject.transform.position;
                     priority = 1;
                     break; 
                 case "footprint":
-                    if (priority >= 3)
+                    if (priority >= 3 || formationPrio >= 3)
                         break;
                     b.type = BehaviourType.Track;
                     if (priority == 2 && 
@@ -247,7 +249,7 @@ public class NPC : MonoBehaviour {
             b.target = playerLastPos;
             b.type = BehaviourType.Track;
         }
-        else if (priority == 0 && wanderTimer <= 0)
+        else if (b.type != BehaviourType.Formation && priority == 0 && wanderTimer <= 0)
         {
             wanderTimer = 1;
             b.type = BehaviourType.Wander;
@@ -363,7 +365,12 @@ public class NPC : MonoBehaviour {
         Debug.Log("setFormation new Leader: " + newLeader);
         leader = newLeader;
         if (leader != gameObject)
+        {
             behaviourRet.type = BehaviourType.Formation;
+            print(name + " is in formation behaviour");
+        }
+        else
+            behaviourRet.type = BehaviourType.Wander;
         offset = newOffset;
     }
 
