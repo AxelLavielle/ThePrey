@@ -112,6 +112,7 @@ public class Player : MonoBehaviour {
             distanceSinceLastStep = 0;
 
             GameObject ft = Instantiate(footprintCopy, transform.parent);
+            ft.name = "footprint";
             ft.transform.SetPositionAndRotation(transform.position, transform.rotation);
 
             Quaternion rot = transform.rotation;
@@ -129,7 +130,6 @@ public class Player : MonoBehaviour {
             pos.y = transform.position.y + 0.1f;
 
             ft.transform.position = pos;
-
             ft.tag = "Visible";
             Destroy(ft, 10);
         }

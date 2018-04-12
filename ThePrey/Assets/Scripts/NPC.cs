@@ -32,9 +32,11 @@ public class NPC : MonoBehaviour {
 	public float rotateSpeed = 3;
     public float fieldOfViewDegrees = 130;
     public float viewDistance = 10;
+    public float shootDistance = 10;
     public float shootTimer = 0f;
 
     private Queue<Vector3> bushes = new Queue<Vector3>();
+    private float bushTimer = 5;
 
     // System vars
     Vector3 moveAmount;
@@ -63,6 +65,7 @@ public class NPC : MonoBehaviour {
 
     behaviour behaviourRet;
     Vector3 playerLastPos;
+    bool seen;
 
     MeshRenderer ground;
 
@@ -78,6 +81,7 @@ public class NPC : MonoBehaviour {
 		rigidbody = GetComponent<Rigidbody> ();
         _animator = GetComponent<Animator>();
         behaviourRet = Behaviour();
+        seen = false;
         ground = GameObject.Find("Plane").GetComponent<MeshRenderer>();
         //sneak = false;
 		run = false;
@@ -98,52 +102,80 @@ public class NPC : MonoBehaviour {
             stamina = maxStamina;
     }
 
+    void updateBehaviour()
+    {
+        if (behaviourRet.type != BehaviourType.Attack)
+        {
+            steeringSeek();
+            steeringRotation();
+        }
+        if (shootTimer > 0)
+            shootTimer -= Time.deltaTime;
+        switch (behaviourRet.type)
+        {
+            case BehaviourType.Wander:
+                _vel /= 4;
+                run = false;
+                walk = true;
+                upStamina();
+                break;
+            case BehaviourType.Track: case BehaviourType.Bush:
+                if (stamina == maxStamina || run)
+                {
+                    stamina -= Time.deltaTime;
+                    run = true;
+                    if (stamina == 0)
+                        run = false;
+                    _vel *= 1.75f;
+                }
+                break;
+            case BehaviourType.Attack:
+                run = false;
+                shoot = true;
+                print("attacking player");
+                shootPlayer();
+                upStamina();
+                break;
+            case BehaviourType.Flee:
+                _vel *= -1;
+                walk = true;
+                upStamina();
+                break;
+            default:
+                run = false;
+                walk = true;
+                upStamina();
+                break;
+        }
+    }
+
     void FixedUpdate() {
         // Calculate movement
         shootTimer -= Time.deltaTime;
         behaviourRet = ChooseBehaviour(behaviourRet);
         _target = behaviourRet.target;
         print(behaviourRet.type);
-
-        if (behaviourRet.type != BehaviourType.Attack)
-            steeringSeek();
-        if (shootTimer > 0)
-            shootTimer -= Time.deltaTime;
-        if (behaviourRet.type == BehaviourType.Wander) {
-            _vel /= 4;
-            run = false;
-            walk = true;
-            upStamina();
-        } else if ((behaviourRet.type == BehaviourType.Track || behaviourRet.type == BehaviourType.Bush) && (stamina == maxStamina || run)) {
-            stamina -= Time.deltaTime;
-            run = true;
-            if (stamina == 0)
-                run = false;
-            _vel *= 1.75f;
-        } else if (behaviourRet.type == BehaviourType.Attack) {
-            run = false;
-            shoot = true;
-            print("attacking player");
-            shootPlayer();
-            upStamina();
-        } else { /*walk or idle*/
-            run = false;
-            walk = true;
-            upStamina();
+        updateBehaviour();
+        if (bushes.Count > 0)
+        {
+            if (bushTimer <= 0)
+            {
+                bushes.Dequeue();
+                bushTimer = 5;
+            }
+            else
+                bushTimer -= Time.deltaTime;
         }
-
         _animator.SetBool("walk", walk);
         _animator.SetBool("run", run);
         _animator.SetBool("shoot", shoot);
         _animator.SetInteger("hp", life);
-        steeringRotation();
         transform.eulerAngles += _rotation * Time.deltaTime;
         transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
         if (behaviourRet.type != BehaviourType.Attack)
             transform.position = CheckBorder(transform.position + _vel * Time.deltaTime);
         if (behaviourRet.type == BehaviourType.Bush && gameObject.transform.position == behaviourRet.target)
             bushes.Enqueue(behaviourRet.target);
-
     }
 
     behaviour ChooseBehaviour(behaviour b)
@@ -156,7 +188,9 @@ public class NPC : MonoBehaviour {
             {
                 case "Player":
                     print("SEEN PLAYER : life  = " + life);
-                    if (life < 2 && !cover)
+                    if (Vector3.Distance(obj.gameObject.transform.position, gameObject.transform.position) > shootDistance)
+                        b.type = BehaviourType.Track;
+                    else if (obj.GetComponent<Player>().life > 5 && Vector3.Distance(obj.gameObject.transform.position, gameObject.transform.position) < 10)
                         b.type = BehaviourType.Flee;
                     else
                         b.type = BehaviourType.Attack;
@@ -173,7 +207,7 @@ public class NPC : MonoBehaviour {
                     priority = 1;
                     break; 
                 case "footprint":
-                    print("tracking footprints");
+                   print("tracking footprints");
                     if (priority >= 3)
                         break;
                     b.type = BehaviourType.Track;
@@ -191,16 +225,17 @@ public class NPC : MonoBehaviour {
         if (priority == 0 && wanderTimer <= 0)
         {
             wanderTimer = 1;
-            print("Looking for signs");
+            //print("Looking for signs");
             b.type = BehaviourType.Wander;
             b.target = gameObject.transform.position;
             b.target.z += wanderDir;
             b.target.x += Random.Range(-15, 15);
-            print(gameObject.transform.position);
-            print(b.target);
+            //print(gameObject.transform.position);
+            //print(b.target);
         }
         else if (priority == 0)
             wanderTimer -= Time.deltaTime;
+        behaviourRet.done = false;
         shoot = false;
         walk = false;
         return b;
@@ -300,12 +335,16 @@ public class NPC : MonoBehaviour {
         _animator.SetTrigger("hit");
 	}
 
+    public void setFormation(GameObject Leader, Vector3 ofset)
+    {
+    }
+
 	void shootPlayer()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (shootTimer > 0)
             return;
-        shootTimer = 1;
+        shootTimer = 2;
         if(player != null)
         {
             RaycastHit hit;
