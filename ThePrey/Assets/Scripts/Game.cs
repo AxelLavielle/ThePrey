@@ -18,10 +18,8 @@ public class Game : MonoBehaviour {
 
     public GameModeEnum mode;
 
-    private GameObject minimap;
     private GameObject player;
     private List<GameObject> NPCs = new List<GameObject>();
-    bool b = true;
 
 	// Use this for initialization
 	void Start ()
@@ -32,7 +30,6 @@ public class Game : MonoBehaviour {
         GameObject[] list = GameObject.FindGameObjectsWithTag("NPC");
         foreach (GameObject obj in list)
             NPCs.Add(obj);
-        minimap = transform.GetChild(0).gameObject;
 	}
 	
 	// Update is called once per frame
@@ -46,26 +43,19 @@ public class Game : MonoBehaviour {
         timerLabel.text = string.Format("{0:00} : {1:00} : {2:000}", minutes, seconds, fraction);
         CheckNPC();
         CheckDefWin();
-        if (Input.GetKeyDown("m"))
-        {
-            minimap.SetActive(b);
-            b = !b;
-        }
     }
 
     void CheckNPC()
     {
-        int i;
-        for(i = NPCs.Count - 1; i >= 0; --i)
+        for(int i = NPCs.Count - 1; i >= 0; --i)
         {
             if (NPCs[i].GetComponent<NPC>().life <= 0)
             {
                 GetComponent<NPCHandler>().removeNPC(NPCs[i]);
                 Destroy(NPCs[i]);
+                NPCs.RemoveAt(i);
             }
         }
-
-        NPCs.RemoveAt(i);
     }
 
     void CheckDefWin()
