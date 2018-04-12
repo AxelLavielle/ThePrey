@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class NPC : MonoBehaviour {
 
-    public enum BehaviourType {
-        Wander,
-        Attack,
+    public enum BehaviourType
+    {
         Formation,
-        Track,
+        Wander,
         Bush,
+        Track,
+        Attack,
         Flee
     };
 
@@ -55,6 +56,9 @@ public class NPC : MonoBehaviour {
     Vector3 _target;
     Vector3 _rotation;
     Vector3 _vel;
+
+    public GameObject leader;
+    public Vector3 offset;
 
     float t = 0.4f;
     float maxAcc = 30f;
@@ -140,6 +144,12 @@ public class NPC : MonoBehaviour {
                 _vel *= -1;
                 walk = true;
                 upStamina();
+                break;
+            case BehaviourType.Formation:
+                run = true;
+                walk = false;
+                shoot = false;
+                behaviourRet.target = leader.transform.TransformPoint(offset);
                 break;
             default:
                 run = false;
@@ -252,14 +262,15 @@ public class NPC : MonoBehaviour {
         foreach(GameObject obj in temp)
         {
             RaycastHit hit;
+            float dist = Mathf.Sqrt(Mathf.Pow(transform.position.x - obj.transform.position.x, 2) + Mathf.Pow(transform.position.z - obj.transform.position.z, 2));
             Vector3 rayDirection = obj.transform.position - eyePos;
 
-            if ((Vector3.Angle(rayDirection, transform.forward)) <= fieldOfViewDegrees * 0.5f)
+            if ((Vector3.Angle(rayDirection, transform.forward)) <= fieldOfViewDegrees * 0.5f || dist < 3)
             {
                 // Detect if object is within the field of view
-                if (Physics.Raycast(eyePos, rayDirection, out hit, viewDistance))
+                if (Physics.Raycast(eyePos, rayDirection, out hit, viewDistance) || dist < 3)
                 {
-                    if(hit.collider.gameObject == obj)
+                    if(hit.collider.gameObject == obj || dist < 3)
                         visible.Add(obj);
                 }
             }
@@ -267,14 +278,15 @@ public class NPC : MonoBehaviour {
         RaycastHit hit2;
         Vector3 playerPos = GameObject.FindGameObjectWithTag("Player").transform.position;
         playerPos.y += 1.5f;
+        float dist2 = Mathf.Sqrt(Mathf.Pow(transform.position.x - playerPos.x, 2) + Mathf.Pow(transform.position.z - playerPos.z, 2));
         Vector3 rayDirection2 = playerPos - eyePos;
 
-        if ((Vector3.Angle(rayDirection2, transform.forward)) <= fieldOfViewDegrees * 0.5f)
+        if ((Vector3.Angle(rayDirection2, transform.forward)) <= fieldOfViewDegrees * 0.5f || dist2 < 3)
         {
             // Detect if object is within the field of view
-            if (Physics.Raycast(eyePos, rayDirection2, out hit2, viewDistance))
+            if (Physics.Raycast(eyePos, rayDirection2, out hit2, viewDistance) || dist2 < 3)
             {
-                if(hit2.collider.gameObject == GameObject.FindGameObjectWithTag("Player"))
+                if(hit2.collider.gameObject == GameObject.FindGameObjectWithTag("Player") || dist2 < 3)
                     visible.Add(GameObject.FindGameObjectWithTag("Player"));
             }
         }
@@ -335,11 +347,15 @@ public class NPC : MonoBehaviour {
         _animator.SetTrigger("hit");
 	}
 
-    public void setFormation(GameObject Leader, Vector3 ofset)
+    public void setFormation(GameObject newLeader, Vector3 newOffset)
     {
+        leader = newLeader;
+        if (leader != gameObject)
+            behaviourRet.type = BehaviourType.Formation;
+        offset = newOffset;
     }
 
-	void shootPlayer()
+    void shootPlayer()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (shootTimer > 0)

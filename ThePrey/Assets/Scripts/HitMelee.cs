@@ -8,7 +8,7 @@ public class HitMelee : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		attackTimer = 0.85f;
+		attackTimer = 1.5f;
 	}
 	
 	// Update is called once per frame
@@ -19,7 +19,7 @@ public class HitMelee : MonoBehaviour {
 
 	public void reset()
 	{
-		attackTimer = 0.85f;
+		attackTimer = 1.5f;
 	}
 
 	void OnTriggerStay(Collider collider) {
