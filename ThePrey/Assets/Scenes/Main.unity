@@ -7058,7 +7058,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4721304304691630, guid: 1a532563bae5af24e8be426999b52d8d, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -397.99
+      value: -433.6
       objectReference: {fileID: 0}
     - target: {fileID: 4721304304691630, guid: 1a532563bae5af24e8be426999b52d8d, type: 2}
       propertyPath: m_LocalPosition.y
@@ -7066,7 +7066,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4721304304691630, guid: 1a532563bae5af24e8be426999b52d8d, type: 2}
       propertyPath: m_LocalPosition.z
-      value: -45.8
+      value: -92.5
       objectReference: {fileID: 0}
     - target: {fileID: 4721304304691630, guid: 1a532563bae5af24e8be426999b52d8d, type: 2}
       propertyPath: m_LocalRotation.x
@@ -7107,12 +7107,17 @@ Prefab:
     - target: {fileID: 114767472626582430, guid: 1a532563bae5af24e8be426999b52d8d,
         type: 2}
       propertyPath: viewDistance
-      value: 130
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 114767472626582430, guid: 1a532563bae5af24e8be426999b52d8d,
         type: 2}
       propertyPath: fieldOfViewDegrees
       value: 160
+      objectReference: {fileID: 0}
+    - target: {fileID: 114767472626582430, guid: 1a532563bae5af24e8be426999b52d8d,
+        type: 2}
+      propertyPath: shootDistance
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1a532563bae5af24e8be426999b52d8d, type: 2}
