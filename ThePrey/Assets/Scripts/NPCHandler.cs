@@ -105,6 +105,15 @@ public class NPCHandler : MonoBehaviour {
     {
         Vector3 target = leader.transform.TransformPoint(offsetLeft);
         GameObject res = NPCInfos[0].GetGameObject();
+        if(NPCInfos.Count > 1)
+            foreach(NPCInfo inf in NPCInfos)
+            {
+                if(!inf.IsLeader())
+                {
+                    res = inf.GetGameObject();
+                    break;
+                }
+            }
         for (int i = 0; i < NPCInfos.Count; ++i)
         {
             if (NPCInfos[i].IsLeader())
@@ -162,7 +171,7 @@ public class NPCHandler : MonoBehaviour {
                     SetFormation(inf);
             }
         }
-        else
+        else if( bhv == NPC.BehaviourType.Bush)
             ResetFormation();
     }
 
