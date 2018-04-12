@@ -55,15 +55,17 @@ public class Game : MonoBehaviour {
 
     void CheckNPC()
     {
-        for(int i = NPCs.Count - 1; i >= 0; --i)
+        int i;
+        for(i = NPCs.Count - 1; i >= 0; --i)
         {
             if (NPCs[i].GetComponent<NPC>().life <= 0)
             {
                 GetComponent<NPCHandler>().removeNPC(NPCs[i]);
                 Destroy(NPCs[i]);
-                NPCs.RemoveAt(i);
             }
         }
+
+        NPCs.RemoveAt(i);
     }
 
     void CheckDefWin()
