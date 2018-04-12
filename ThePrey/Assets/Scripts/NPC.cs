@@ -64,7 +64,7 @@ public class NPC : MonoBehaviour {
     public Vector3 offset;
 
     float t = 0.4f;
-    float maxAcc = 30f;
+    float maxAcc = 35f;
     float maxVel = 5;
     float rotationSpeed = 35f;
 
@@ -140,17 +140,11 @@ public class NPC : MonoBehaviour {
                 if (gameObject != leader &&
                     (gameObject.transform.position.z > leader.transform.position.z && wanderDir > 0
                     || gameObject.transform.position.z < leader.transform.position.z && wanderDir < 0))
-                {
                     _vel /= 4;
-                    print("slow down");
-                }
                 else if (gameObject != leader &&
                     (gameObject.transform.position.z < leader.transform.position.z && wanderDir > 0
                     || gameObject.transform.position.z > leader.transform.position.z && wanderDir < 0))
-                {
                     _vel /= 2;
-                    print("speed up");
-                }
                 else
                     _vel /= 3;
                 run = false;
