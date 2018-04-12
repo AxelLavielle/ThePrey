@@ -26,11 +26,9 @@ public class Menu : MonoBehaviour {
     {
         modes[0] = "Killing spree";
         modes[1] = "Survival";
-        modes[2] = "Grand theft baby";
 
         descriptions[0] = "Kill all enemies before the timer goes off";
         descriptions[1] = "Survive the hunt for as long as you can";
-        descriptions[2] = "Get your progeny out of the hunter's hand and flee with it";
 
         if (SceneManager.GetActiveScene().name == "ModeSelection")
         {
@@ -59,7 +57,7 @@ public class Menu : MonoBehaviour {
     {
         GameMode.mode--;
         if (GameMode.mode < 0)
-            GameMode.mode = 2;
+            GameMode.mode = 1;
         mode.text = modes[GameMode.mode];
         description.text = descriptions[GameMode.mode];
     }
@@ -67,7 +65,7 @@ public class Menu : MonoBehaviour {
     public void RightSelection()
     {
         GameMode.mode++;
-        GameMode.mode %= 3;
+        GameMode.mode %= 2;
         mode.text = modes[GameMode.mode];
         description.text = descriptions[GameMode.mode];
     }
