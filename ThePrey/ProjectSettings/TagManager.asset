@@ -9,6 +9,8 @@ TagManager:
   - Visible
   - Heart
   - staminabar
+  - tree
+  - rock
   layers:
   - Default
   - TransparentFX

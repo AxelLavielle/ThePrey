@@ -35,7 +35,8 @@ public class NPC : MonoBehaviour {
     public float viewDistance = 10;
     public float shootDistance = 10;
     public float shootTimer = 0f;
-
+    public GameObject pathfinder;
+    private PathFinding _pathfinder;
     private Queue<Vector3> bushes = new Queue<Vector3>();
     private float bushTimer = 5;
 
@@ -94,6 +95,7 @@ public class NPC : MonoBehaviour {
         attack = false;
         stamina = maxStamina;
         handler = GameObject.FindGameObjectWithTag("GameController").GetComponent<NPCHandler>();
+        _pathfinder = pathfinder.GetComponent<PathFinding>();
 	}
 
     behaviour Behaviour()
