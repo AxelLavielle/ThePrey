@@ -45,6 +45,8 @@ public class NPC : MonoBehaviour {
 	Vector3 smoothMoveVelocity;
 	Rigidbody rigidbody;
     Animator _animator;
+    float fleeTimer = 0;
+    float shootAnimTimer = 0;
 
     //Animator vars
     bool walk;
@@ -125,6 +127,7 @@ public class NPC : MonoBehaviour {
         }
         if (shootTimer > 0)
             shootTimer -= Time.deltaTime;
+        print(name + " - behaviour : " + behaviourRet.type);
         switch (behaviourRet.type)
         {
             case BehaviourType.Formation:
@@ -188,8 +191,10 @@ public class NPC : MonoBehaviour {
         // Calculate movement
         shootTimer -= Time.deltaTime;
         behaviourRet = ChooseBehaviour(behaviourRet);
+        //print(name + " - behaviour before set behaviour : " + behaviourRet.type);
         handler.SetNPCBehavior(gameObject, behaviourRet.type);
         //_target = behaviourRet.target;
+        //print(name + " - behaviour after set behaviour : " + behaviourRet.type);
         if (Vector3.Distance(gameObject.transform.position, _target) < avoidTargetRadius)
             _target = _pathfinder.getPosition(gameObject.transform.position, behaviourRet.target);
 
@@ -234,17 +239,36 @@ public class NPC : MonoBehaviour {
         GetVision();
         int priority = 0;
         int formationPrio = (int)handler.GetGeneralBehaviour();
+        print(handler.GetGeneralBehaviour());
         foreach (GameObject obj in visible)
         {
             switch (obj.name)
             {
                 case "Player":
+                    print(name + " - player seen : distance to shoot : " + shootDistance
+                        + " distance from player : " + Vector3.Distance(obj.gameObject.transform.position, gameObject.transform.position));
+                    if (fleeTimer > 0)
+                    {
+                        fleeTimer -= Time.deltaTime;
+                        return b;
+                    }
+                    else if (shootAnimTimer > 0)
+                    {
+                        shootAnimTimer -= Time.deltaTime;
+                        return b;
+                    }
                     if (Vector3.Distance(obj.gameObject.transform.position, gameObject.transform.position) > shootDistance)
                         b.type = BehaviourType.Track;
                     else if (obj.GetComponent<Player>().life > 5 && Vector3.Distance(obj.gameObject.transform.position, gameObject.transform.position) < 10)
+                    {
                         b.type = BehaviourType.Flee;
+                        fleeTimer = 2;
+                    }
                     else
+                    {
                         b.type = BehaviourType.Attack;
+                        shootAnimTimer = 1;
+                    }
                     priority = 3;
                     b.target = obj.gameObject.transform.position;
                     playerLastPos = b.target;
@@ -253,6 +277,7 @@ public class NPC : MonoBehaviour {
                 case "bush":
                     if (formationPrio >= 2 || priority >= 2 || b.target == obj.transform.position || bushes.Contains(obj.gameObject.transform.position))
                         break;
+                    print(name + " - BUSH BUSH BUSH pos : " + obj.transform.position + " target pos : " + b.target);
                     b.type = BehaviourType.Bush;
                     b.target = obj.gameObject.transform.position;
                     priority = 1;
@@ -260,6 +285,7 @@ public class NPC : MonoBehaviour {
                 case "footprint":
                     if (priority >= 3 || formationPrio >= 3)
                         break;
+                    print("Tracking from footprints");
                     b.type = BehaviourType.Track;
                     if (priority == 2 && 
                         Vector3.Distance(b.target, gameObject.transform.position) > Vector3.Distance(b.target, obj.gameObject.transform.position))
