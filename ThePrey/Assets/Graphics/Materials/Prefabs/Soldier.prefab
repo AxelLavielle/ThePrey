@@ -173,6 +173,7 @@ GameObject:
   - component: {fileID: 54784895936076922}
   - component: {fileID: 65907844370793048}
   - component: {fileID: 114767472626582430}
+  - component: {fileID: 82034315849064514}
   m_Layer: 0
   m_Name: Soldier
   m_TagString: NPC
@@ -929,7 +930,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1472604355488316}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -397.99, y: -235.30658, z: -45.8}
+  m_LocalPosition: {x: -433.6, y: -235.31, z: -92.5}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children:
   - {fileID: 4436085232518586}
@@ -1018,8 +1019,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1514887979370452}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0128, y: 0.1201, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalPosition: {x: -0.0128, y: 0.027, z: 0}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_Children: []
   m_Father: {fileID: 4721304304691630}
   m_RootOrder: 3
@@ -1161,6 +1162,86 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.1, y: 0.24, z: 0.1}
   m_Center: {x: 0, y: 0.12, z: 0}
+--- !u!82 &82034315849064514
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1472604355488316}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 950f75397004acb41b4249fdb7b2658f, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!95 &95615267824080358
 Animator:
   serializedVersion: 3
@@ -1202,9 +1283,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeed: 6
   rotateSpeed: 3
-  fieldOfViewDegrees: 130
-  viewDistance: 10
+  fieldOfViewDegrees: 160
+  viewDistance: 40
+  shootDistance: 20
   shootTimer: 1
+  leader: {fileID: 0}
+  offset: {x: 0, y: 0, z: 0}
   life: 2
   maxStamina: 2
 --- !u!137 &137818018361804098

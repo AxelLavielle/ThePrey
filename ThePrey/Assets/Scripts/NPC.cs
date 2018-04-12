@@ -80,6 +80,8 @@ public class NPC : MonoBehaviour {
     private float stamina;
     private float wanderTimer = 0f;
 
+    NPCHandler handler;
+
     private List<GameObject> visible = new List<GameObject>();
 
     void Awake() {
@@ -92,6 +94,7 @@ public class NPC : MonoBehaviour {
 		run = false;
         attack = false;
         stamina = maxStamina;
+        handler = GameObject.FindGameObjectWithTag("GameController").GetComponent<NPCHandler>();
 	}
 
     behaviour Behaviour()
@@ -164,6 +167,7 @@ public class NPC : MonoBehaviour {
         // Calculate movement
         shootTimer -= Time.deltaTime;
         behaviourRet = ChooseBehaviour(behaviourRet);
+        handler.SetNPCBehavior(gameObject, behaviourRet.type);
         _target = behaviourRet.target;
         print(behaviourRet.type);
         updateBehaviour();
@@ -369,6 +373,7 @@ public class NPC : MonoBehaviour {
 
     public void setFormation(GameObject newLeader, Vector3 newOffset)
     {
+        Debug.Log("setFormation new Leader: " + newLeader);
         leader = newLeader;
         if (leader != gameObject)
             behaviourRet.type = BehaviourType.Formation;
