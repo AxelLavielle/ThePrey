@@ -54,6 +54,8 @@ public class NPC : MonoBehaviour {
     bool attack;
     bool cover;
 
+    float avoidTargetRadius = 5;
+    Vector3 _avoidTarget;
     Vector3 _target;
     Vector3 _rotation;
     Vector3 _vel;
@@ -96,6 +98,7 @@ public class NPC : MonoBehaviour {
         stamina = maxStamina;
         handler = GameObject.FindGameObjectWithTag("GameController").GetComponent<NPCHandler>();
         _pathfinder = pathfinder.GetComponent<PathFinding>();
+        _avoidTarget = gameObject.transform.position;
 	}
 
     behaviour Behaviour()
@@ -169,7 +172,9 @@ public class NPC : MonoBehaviour {
         shootTimer -= Time.deltaTime;
         behaviourRet = ChooseBehaviour(behaviourRet);
         handler.SetNPCBehavior(gameObject, behaviourRet.type);
-        _target = behaviourRet.target;
+        if (Vector3.Distance(gameObject.transform.position, _target) < avoidTargetRadius)
+            _target = _pathfinder.getPosition(gameObject.transform.position, behaviourRet.target);
+
         //print(name + " - " + behaviourRet.type);
         updateBehaviour();
         if (bushes.Count > 0)
