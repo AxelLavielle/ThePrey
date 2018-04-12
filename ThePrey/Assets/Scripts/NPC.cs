@@ -135,8 +135,6 @@ public class NPC : MonoBehaviour {
                     shoot = false;
                     break;
                 }
-                if (gameObject != leader)
-                    print(name + " : z = " + gameObject.transform.position.z + " leader : z = " + leader.transform.position.z);
                 if (gameObject != leader &&
                     (gameObject.transform.position.z > leader.transform.position.z && wanderDir > 0
                     || gameObject.transform.position.z < leader.transform.position.z && wanderDir < 0))
@@ -278,7 +276,6 @@ public class NPC : MonoBehaviour {
         }
         else if ((b.type != BehaviourType.Formation || handler.GetGeneralBehaviour() == BehaviourType.Wander) && priority == 0 && wanderTimer <= 0)
         {
-            print(name + " - wandering");
             wanderTimer = 1;
             b.type = BehaviourType.Wander;
             b.target = gameObject.transform.position;
