@@ -54,7 +54,7 @@ public class NPC : MonoBehaviour {
     bool attack;
     bool cover;
 
-    float avoidTargetRadius = 5;
+    float avoidTargetRadius = 10;
     Vector3 _avoidTarget;
     Vector3 _target;
     Vector3 _rotation;
@@ -98,7 +98,7 @@ public class NPC : MonoBehaviour {
         stamina = maxStamina;
         handler = GameObject.FindGameObjectWithTag("GameController").GetComponent<NPCHandler>();
         _pathfinder = pathfinder.GetComponent<PathFinding>();
-        _avoidTarget = gameObject.transform.position;
+        _target = gameObject.transform.position;
 	}
 
     behaviour Behaviour()
@@ -116,7 +116,7 @@ public class NPC : MonoBehaviour {
 
     void updateBehaviour()
     {
-        if (behaviourRet.type == BehaviourType.Formation)
+        if (behaviourRet.type == BehaviourType.Formation && handler.GetGeneralBehaviour() != BehaviourType.Wander)
             _target = leader.transform.TransformPoint(offset);
         if (behaviourRet.type != BehaviourType.Attack)
         {
@@ -127,6 +127,36 @@ public class NPC : MonoBehaviour {
             shootTimer -= Time.deltaTime;
         switch (behaviourRet.type)
         {
+            case BehaviourType.Formation:
+                if (handler.GetGeneralBehaviour() != BehaviourType.Wander)
+                {
+                    run = true;
+                    walk = false;
+                    shoot = false;
+                    break;
+                }
+                if (gameObject != leader)
+                    print(name + " : z = " + gameObject.transform.position.z + " leader : z = " + leader.transform.position.z);
+                if (gameObject != leader &&
+                    (gameObject.transform.position.z > leader.transform.position.z && wanderDir > 0
+                    || gameObject.transform.position.z < leader.transform.position.z && wanderDir < 0))
+                {
+                    _vel /= 4;
+                    print("slow down");
+                }
+                else if (gameObject != leader &&
+                    (gameObject.transform.position.z < leader.transform.position.z && wanderDir > 0
+                    || gameObject.transform.position.z > leader.transform.position.z && wanderDir < 0))
+                {
+                    _vel /= 2;
+                    print("speed up");
+                }
+                else
+                    _vel /= 3;
+                run = false;
+                walk = true;
+                upStamina();
+                break;
             case BehaviourType.Wander:
                 _vel /= 4;
                 run = false;
@@ -154,11 +184,6 @@ public class NPC : MonoBehaviour {
                 walk = true;
                 upStamina();
                 break;
-            case BehaviourType.Formation:
-                run = true;
-                walk = false;
-                shoot = false;
-                break;
             default:
                 run = false;
                 walk = true;
@@ -172,6 +197,7 @@ public class NPC : MonoBehaviour {
         shootTimer -= Time.deltaTime;
         behaviourRet = ChooseBehaviour(behaviourRet);
         handler.SetNPCBehavior(gameObject, behaviourRet.type);
+        //_target = behaviourRet.target;
         if (Vector3.Distance(gameObject.transform.position, _target) < avoidTargetRadius)
             _target = _pathfinder.getPosition(gameObject.transform.position, behaviourRet.target);
 
@@ -256,13 +282,15 @@ public class NPC : MonoBehaviour {
             b.target = playerLastPos;
             b.type = BehaviourType.Track;
         }
-        else if (b.type != BehaviourType.Formation && priority == 0 && wanderTimer <= 0)
+        else if ((b.type != BehaviourType.Formation || handler.GetGeneralBehaviour() == BehaviourType.Wander) && priority == 0 && wanderTimer <= 0)
         {
+            print(name + " - wandering");
             wanderTimer = 1;
             b.type = BehaviourType.Wander;
             b.target = gameObject.transform.position;
             b.target.z += wanderDir;
             b.target.x += Random.Range(-15, 15);
+            print(b.target);
         }
         else if (priority == 0)
             wanderTimer -= Time.deltaTime;
@@ -369,12 +397,12 @@ public class NPC : MonoBehaviour {
 
     public void setFormation(GameObject newLeader, Vector3 newOffset)
     {
-        Debug.Log("setFormation new Leader: " + newLeader);
+        //Debug.Log("setFormation new Leader: " + newLeader);
         leader = newLeader;
         if (leader != gameObject)
         {
             behaviourRet.type = BehaviourType.Formation;
-            print(name + " is in formation behaviour");
+            //print(name + " is in formation behaviour");
         }
         else
             behaviourRet.type = BehaviourType.Wander;

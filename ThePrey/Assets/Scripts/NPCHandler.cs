@@ -20,8 +20,8 @@ public class NPCHandler : MonoBehaviour {
         public void SetBehaviour(NPC.BehaviourType newBehaviour) { behaviour = newBehaviour; }
     };
 
-    Vector3 LeftLine = new Vector3(-5, 0, 0);
-    Vector3 RightLine = new Vector3(5, 0, 0);
+    Vector3 LeftLine = new Vector3(-6, 0, 0);
+    Vector3 RightLine = new Vector3(6, 0, 0);
     Vector3 LeftTrackV = new Vector3(-5, 0, 5);
     Vector3 RightTrackV = new Vector3(5, 0, 5);
     Vector3 LeftAttackV = new Vector3(-2, 0, 2);
