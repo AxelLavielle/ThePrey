@@ -218,8 +218,11 @@ public class NPC : MonoBehaviour {
         _animator.SetBool("run", run);
         _animator.SetBool("shoot", shoot);
         _animator.SetInteger("hp", life);
-        transform.eulerAngles += _rotation * Time.deltaTime;
-        transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+        if (!float.IsNaN(_rotation.y) && !float.IsInfinity(_rotation.y))
+        {
+            transform.eulerAngles += _rotation * Time.deltaTime;
+            transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+        }
         if (behaviourRet.type != BehaviourType.Attack)
             transform.position = CheckBorder(transform.position + _vel * Time.deltaTime);
         if (behaviourRet.type == BehaviourType.Bush && gameObject.transform.position == behaviourRet.target)
@@ -281,7 +284,6 @@ public class NPC : MonoBehaviour {
             b.target = gameObject.transform.position;
             b.target.z += wanderDir;
             b.target.x += Random.Range(-15, 15);
-            print(b.target);
         }
         else if (priority == 0)
             wanderTimer -= Time.deltaTime;
