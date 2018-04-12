@@ -339,8 +339,11 @@ public class NPC : MonoBehaviour {
         Vector3 dir = _target - transform.position;
         Vector3 fwd = transform.forward;
         float angle = Mathf.Atan2(fwd.z * dir.x - dir.z * fwd.x, fwd.x * dir.x + fwd.z * dir.z) * Mathf.Rad2Deg;
-        if (float.IsNaN(angle))
-            angle = 0f;
+        if (float.IsNaN(angle) || float.IsInfinity(angle))
+        {
+            _rotation = new Vector3(0, 0, 0);
+            return 0;
+        }
         Vector3 desired = new Vector3(0, 5 * Mathf.Min(Mathf.Abs(angle), rotationSpeed) * angle / Mathf.Abs(angle), 0);
         Vector3 steering = desired - _rotation;
         _rotation += steering;
