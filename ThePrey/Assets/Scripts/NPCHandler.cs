@@ -20,12 +20,12 @@ public class NPCHandler : MonoBehaviour {
         public void SetBehaviour(NPC.BehaviourType newBehaviour) { behaviour = newBehaviour; }
     };
 
-    Vector3 LeftLine = new Vector3(-30, 0, 0);
-    Vector3 RightLine = new Vector3(30, 0, 0);
-    Vector3 LeftTrackV = new Vector3(-20, 0, 20);
-    Vector3 RightTrackV = new Vector3(20, 0, 20);
-    Vector3 LeftAttackV = new Vector3(-30, 0, 20);
-    Vector3 RightAttackV = new Vector3(30, 0, 20);
+    Vector3 LeftLine = new Vector3(-10, 0, 0);
+    Vector3 RightLine = new Vector3(10, 0, 0);
+    Vector3 LeftTrackV = new Vector3(-5, 0, 5);
+    Vector3 RightTrackV = new Vector3(5, 0, 5);
+    Vector3 LeftAttackV = new Vector3(-10, 0, 5);
+    Vector3 RightAttackV = new Vector3(10, 0, 5);
 
     List<NPCInfo> NPCInfos = new List<NPCInfo>();
 
@@ -47,6 +47,26 @@ public class NPCHandler : MonoBehaviour {
 
         SetFormation(NPCInfos[0]);
 	}
+
+    private void FixedUpdate()
+    {
+        foreach(NPCInfo inf in NPCInfos)
+        {
+            if(inf.GetBehaviour() != NPC.BehaviourType.Formation && !inf.IsLeader())
+            {
+                ResetFormation();
+            }
+        }
+    }
+
+    private void ResetFormation()
+    {
+        foreach (NPCInfo inf in NPCInfos)
+        {
+            if (inf.IsLeader())
+                SetFormation(inf);
+        }
+    }
 
     private void SetFormation(NPCInfo leader)
     {
