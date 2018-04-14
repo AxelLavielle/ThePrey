@@ -186,6 +186,8 @@ public class NPC : MonoBehaviour {
 
     void FixedUpdate() {
         // Calculate movement
+        if (life == 0)
+            return;
         shootTimer -= Time.deltaTime;
         behaviourRet = ChooseBehaviour(behaviourRet);
         handler.SetNPCBehavior(gameObject, behaviourRet.type);

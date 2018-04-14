@@ -26,7 +26,7 @@ public class Game : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
     {
-        timer = 500f;
+        timer = 125f;
         mode = (GameModeEnum)GameMode.mode;
         player = GameObject.FindGameObjectWithTag("Player");
         GameObject[] list = GameObject.FindGameObjectsWithTag("NPC");
@@ -43,6 +43,7 @@ public class Game : MonoBehaviour {
         float fraction = Mathf.Floor((timer * 100f) % 100f);
 
         timerLabel.text = string.Format("{0:00} : {1:00} : {2:000}", minutes, seconds, fraction);
+        timerLabel.color = Color.white;
         CheckNPC();
         CheckDefWin();
 
@@ -59,8 +60,9 @@ public class Game : MonoBehaviour {
         {
             if (NPCs[i].GetComponent<NPC>().life <= 0)
             {
-                NPCs.RemoveAt(i);
                 GetComponent<NPCHandler>().removeNPC(NPCs[i]);
+                NPCs.RemoveAt(i);
+                NPCs.TrimExcess();
             }
         }
     }
